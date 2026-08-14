@@ -1,0 +1,153 @@
+<section class="page">
+  <header class="page-header">
+    <h2>Integration flows</h2>
+  </header>
+
+  @if (error()) {
+    <p class="banner error" role="alert">{{ error() }}</p>
+  }
+
+  @if (loading()) {
+    <p class="status">Loading flows…</p>
+  } @else if (flows().length === 0) {
+    <div class="empty">
+      <p>No integration flows yet.</p>
+      <p-button
+        label="Create your first flow"
+        icon="pi pi-plus"
+        (onClick)="goToNewFlow()"
+      />
+    </div>
+  } @else {
+    <div class="toolbar">
+      <label class="search-field">
+        <span class="search-label">Search by name</span>
+        <input
+          type="search"
+          [value]="nameQuery()"
+          (input)="onNameQueryInput($event)"
+          placeholder="Filter flows…"
+          autocomplete="off"
+        />
+      </label>
+      @if (nameQuery().trim()) {
+        <p-button
+          type="button"
+          label="Clear"
+          [text]="true"
+          size="small"
+          (onClick)="clearNameQuery()"
+        />
+        <span class="result-count">
+          {{ displayedFlows().length }} of {{ flows().length }}
+        </span>
+      }
+    </div>
+
+    @if (displayedFlows().length === 0) {
+      <p class="status">No flows match “{{ nameQuery().trim() }}”.</p>
+    } @else {
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>
+                <button type="button" class="sort-btn" (click)="toggleSort('name')">
+                  Name{{ sortIndicator('name') }}
+                </button>
+              </th>
+              <th>
+                <button
+                  type="button"
+                  class="sort-btn"
+                  (click)="toggleSort('consumer')"
+                >
+                  Consumer{{ sortIndicator('consumer') }}
+                </button>
+              </th>
+              <th>Pipeline</th>
+              <th>
+                <button
+                  type="button"
+                  class="sort-btn"
+                  (click)="toggleSort('producer')"
+                >
+                  Producer{{ sortIndicator('producer') }}
+                </button>
+              </th>
+              <th>Config</th>
+              <th>
+                <button
+                  type="button"
+                  class="sort-btn"
+                  (click)="toggleSort('services')"
+                >
+                  Services{{ sortIndicator('services') }}
+                </button>
+              </th>
+              <th>
+                <button
+                  type="button"
+                  class="sort-btn"
+                  (click)="toggleSort('createdAt')"
+                >
+                  Created{{ sortIndicator('createdAt') }}
+                </button>
+              </th>
+              <th>
+                <button
+                  type="button"
+                  class="sort-btn"
+                  (click)="toggleSort('updatedAt')"
+                >
+                  Updated{{ sortIndicator('updatedAt') }}
+                </button>
+              </th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (flow of displayedFlows(); track flow.id) {
+              <tr>
+                <td>
+                  <a [routerLink]="['/flows', flow.id]" class="name-link">{{
+                    flow.name
+                  }}</a>
+                </td>
+                <td>{{ componentLabel(flow.consumerComponentId) }}</td>
+                <td class="pipeline">{{ pipelineSummary(flow) }}</td>
+                <td>{{ componentLabel(flow.producerComponentId) }}</td>
+                <td class="config-summary">
+                  @for (line of configSummary(flow); track line) {
+                    <div>{{ line }}</div>
+                  }
+                </td>
+                <td>{{ serviceCount(flow) }}</td>
+                <td class="date-cell">{{ flow.createdAt | date: 'dd/MM/yyyy' }}</td>
+                <td class="date-cell">{{ flow.updatedAt | date: 'dd/MM/yyyy' }}</td>
+                <td class="actions">
+                  <p-button
+                    label="Edit"
+                    severity="success"
+                    size="small"
+                    icon="pi pi-pencil"
+                    (onClick)="editFlow(flow.id)"
+                  />
+                  <p-button
+                    [label]="deletingId() === flow.id ? 'Deleting…' : 'Delete'"
+                    severity="danger"
+                    size="small"
+                    icon="pi pi-trash"
+                    [disabled]="deletingId() === flow.id"
+                    [loading]="deletingId() === flow.id"
+                    (onClick)="deleteFlow(flow)"
+                  />
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    }
+  }
+</section>

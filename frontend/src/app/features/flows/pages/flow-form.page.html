@@ -1,0 +1,230 @@
+<section class="page">
+  <header class="page-header">
+    <div>
+      <a routerLink="/flows" class="back">← Flows</a>
+      <h2>{{ isEdit() ? 'Edit flow' : 'New flow' }}</h2>
+    </div>
+  </header>
+
+  @if (feedback(); as fb) {
+    <div
+      class="banner error"
+      role="alert"
+      [class.conflict]="fb.isConflict"
+      [class.not-found]="fb.isNotFound"
+    >
+      <div class="banner-top">
+        <strong>{{ fb.title }}</strong>
+        <p-button
+          label="Dismiss"
+          [text]="true"
+          size="small"
+          (onClick)="clearFeedback()"
+        />
+      </div>
+      <p>{{ fb.message }}</p>
+      @if (fb.hint) {
+        <p class="hint-line">{{ fb.hint }}</p>
+      }
+      @if (fb.issues.length > 0) {
+        <ul class="issue-list">
+          @for (issue of fb.issues; track issue.path + issue.code) {
+            <li>
+              <code>{{ issue.path }}</code> — {{ issue.message }}
+            </li>
+          }
+        </ul>
+      }
+    </div>
+  }
+
+  @if (loading()) {
+    <p class="status">Loading form…</p>
+  } @else if (loadFailed()) {
+    <div class="empty">
+      <p>Could not load this page.</p>
+      <p-button
+        label="Back to flows"
+        [outlined]="true"
+        icon="pi pi-arrow-left"
+        (onClick)="goToFlows()"
+      />
+    </div>
+  } @else if (form) {
+    <form class="flow-form" [formGroup]="form" (ngSubmit)="submit()">
+      <label class="field">
+        <span class="label">Flow name <span class="required">*</span></span>
+        <input
+          type="text"
+          formControlName="name"
+          autocomplete="off"
+          [class.invalid]="
+            form.controls.name.invalid && form.controls.name.touched
+          "
+        />
+        @if (form.controls.name.invalid && form.controls.name.touched) {
+          <span class="field-error">Name is required.</span>
+        }
+      </label>
+
+      <section class="block" formGroupName="consumer">
+        <h3>Consumer</h3>
+        <p class="role-hint">Exactly one consumer starts the flow.</p>
+
+        <label class="field">
+          <span class="label">Component <span class="required">*</span></span>
+          <select
+            formControlName="componentId"
+            (change)="onConsumerChange()"
+          >
+            @for (item of consumers(); track item.id) {
+              <option [value]="item.id">
+                {{ item.name }} ({{ item.category }})
+              </option>
+            }
+          </select>
+        </label>
+
+        @if (definitionFor(form.controls.consumer.controls.componentId.value); as def) {
+          <p class="description">{{ def.description }}</p>
+          <app-component-config-fields
+            [configGroup]="form.controls.consumer.controls.config"
+            [fields]="def.configFields"
+          />
+        }
+      </section>
+
+      <section class="block">
+        <div class="block-header">
+          <div>
+            <h3>Services</h3>
+            <p class="role-hint">
+              Zero or more ordered services. The same type may be used more than
+              once.
+            </p>
+          </div>
+          <p-button
+            type="button"
+            label="Add service"
+            icon="pi pi-plus"
+            severity="success"
+            (onClick)="addService()"
+          />
+        </div>
+
+        @if (serviceGroups.length === 0) {
+          <p class="muted">No services yet. Optional — you can save without any.</p>
+        }
+
+        <div formArrayName="services" class="services">
+          @for (
+            serviceGroup of serviceGroups.controls;
+            track $index;
+            let i = $index
+          ) {
+            <article class="service-card" [formGroupName]="i">
+              <header class="service-header">
+                <strong>Service {{ i + 1 }}</strong>
+                <div class="service-actions">
+                  <p-button
+                    type="button"
+                    label="Up"
+                    icon="pi pi-arrow-up"
+                    [text]="true"
+                    size="small"
+                    [disabled]="i === 0"
+                    (onClick)="moveService(i, -1)"
+                  />
+                  <p-button
+                    type="button"
+                    label="Down"
+                    icon="pi pi-arrow-down"
+                    [text]="true"
+                    size="small"
+                    [disabled]="i === serviceGroups.length - 1"
+                    (onClick)="moveService(i, 1)"
+                  />
+                  <p-button
+                    type="button"
+                    label="Remove"
+                    icon="pi pi-trash"
+                    severity="danger"
+                    [text]="true"
+                    size="small"
+                    (onClick)="removeService(i)"
+                  />
+                </div>
+              </header>
+
+              <label class="field">
+                <span class="label">Component <span class="required">*</span></span>
+                <select
+                  formControlName="componentId"
+                  (change)="onServiceChange(i)"
+                >
+                  @for (item of services(); track item.id) {
+                    <option [value]="item.id">
+                      {{ item.name }} ({{ item.category }})
+                    </option>
+                  }
+                </select>
+              </label>
+
+              @if (definitionFor(serviceGroup.controls.componentId.value); as def) {
+                <p class="description">{{ def.description }}</p>
+                <app-component-config-fields
+                  [configGroup]="serviceGroup.controls.config"
+                  [fields]="def.configFields"
+                />
+              }
+            </article>
+          }
+        </div>
+      </section>
+
+      <section class="block" formGroupName="producer">
+        <h3>Producer</h3>
+        <p class="role-hint">Exactly one producer ends the flow.</p>
+
+        <label class="field">
+          <span class="label">Component <span class="required">*</span></span>
+          <select
+            formControlName="componentId"
+            (change)="onProducerChange()"
+          >
+            @for (item of producers(); track item.id) {
+              <option [value]="item.id">
+                {{ item.name }} ({{ item.category }})
+              </option>
+            }
+          </select>
+        </label>
+
+        @if (definitionFor(form.controls.producer.controls.componentId.value); as def) {
+          <p class="description">{{ def.description }}</p>
+          <app-component-config-fields
+            [configGroup]="form.controls.producer.controls.config"
+            [fields]="def.configFields"
+          />
+        }
+      </section>
+
+      <div class="actions">
+        <p-button
+          type="button"
+          label="Cancel"
+          icon="pi pi-times"
+          severity="danger"
+          (onClick)="goToFlows()"
+        />
+        <p-button
+          type="submit"
+          [label]="saving() ? 'Saving…' : isEdit() ? 'Save changes' : 'Create flow'"
+          icon="pi pi-check"
+          [disabled]="saving()"
+          [loading]="saving()"
+        />
+      </div>
+    </form>
+  }
+</section>

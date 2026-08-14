@@ -1,0 +1,79 @@
+@if (fields.length === 0) {
+  <p class="muted">This component has no configurable fields.</p>
+} @else {
+  <div class="fields" [formGroup]="configGroup">
+    @for (field of fields; track trackField($index, field)) {
+      <label class="field">
+        <span class="label">
+          {{ field.label || field.key }}
+          @if (field.required) {
+            <span class="required" aria-hidden="true">*</span>
+          } @else {
+            <span class="optional">(optional)</span>
+          }
+        </span>
+
+        @if (field.description) {
+          <span class="hint">{{ field.description }}</span>
+        }
+
+        @switch (field.fieldType) {
+          @case ('boolean') {
+            <input type="checkbox" [formControlName]="field.key" />
+          }
+          @case ('enumeration') {
+            <select
+              [formControlName]="field.key"
+              [class.invalid]="isInvalid(field.key)"
+            >
+              @if (!field.required) {
+                <option value="">—</option>
+              }
+              @for (option of field.options ?? []; track option.value) {
+                <option [value]="option.value">{{ option.label }}</option>
+              }
+            </select>
+          }
+          @case ('textenumeration') {
+            <select
+              [formControlName]="field.key"
+              [class.invalid]="isInvalid(field.key)"
+            >
+              @for (option of field.options ?? []; track option.value) {
+                <option [value]="option.value">
+                  {{ option.label || '(empty)' }}
+                </option>
+              }
+            </select>
+          }
+          @case ('description') {
+            <textarea
+              rows="3"
+              [formControlName]="field.key"
+              [class.invalid]="isInvalid(field.key)"
+              [attr.placeholder]="field.defaultValue || null"
+            ></textarea>
+          }
+          @default {
+            <input
+              type="text"
+              [formControlName]="field.key"
+              [class.invalid]="isInvalid(field.key)"
+              [attr.placeholder]="
+                field.fieldType === 'cron'
+                  ? 'e.g. 0 0/5 * * * ?'
+                  : field.key === 'directory' || field.key === 'file-uri'
+                    ? 'e.g. file:/tmp/out'
+                    : field.defaultValue || null
+              "
+            />
+          }
+        }
+
+        @if (isInvalid(field.key)) {
+          <span class="field-error">This field is required.</span>
+        }
+      </label>
+    }
+  </div>
+}

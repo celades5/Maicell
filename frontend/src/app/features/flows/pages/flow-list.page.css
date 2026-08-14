@@ -1,0 +1,184 @@
+.page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+}
+
+h2 {
+  margin: 0;
+  font-size: 1.35rem;
+  font-weight: 600;
+}
+
+.status,
+.empty {
+  color: #555;
+}
+
+.empty {
+  display: grid;
+  gap: 0.85rem;
+  justify-items: start;
+  padding: 1.25rem 0;
+}
+
+.banner {
+  margin: 0 0 1rem;
+  padding: 0.75rem 0.9rem;
+  border-radius: 4px;
+}
+
+.banner.error {
+  background: #fdecec;
+  color: #8a1f1f;
+  border: 1px solid #f0c4c4;
+}
+
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  gap: 0.75rem 1rem;
+  margin-bottom: 1rem;
+}
+
+.search-field {
+  display: grid;
+  gap: 0.35rem;
+  min-width: min(100%, 20rem);
+}
+
+.search-label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #334155;
+}
+
+.search-field input {
+  padding: 0.5rem 0.65rem;
+  border: 1px solid #cbd5e1;
+  border-radius: 4px;
+  font: inherit;
+  background: #fff;
+}
+
+.search-field input:focus {
+  outline: 2px solid #93a4bd;
+  outline-offset: 1px;
+}
+
+.result-count {
+  color: #64748b;
+  font-size: 0.85rem;
+  padding-bottom: 0.35rem;
+}
+
+.sort-btn {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  font: inherit;
+  font-weight: 600;
+  color: inherit;
+  cursor: pointer;
+  text-align: left;
+}
+
+.sort-btn:hover {
+  color: #1f3a5f;
+  text-decoration: underline;
+}
+
+.table-wrap {
+  overflow-x: visible;
+  border: 1px solid #d9dee7;
+  border-radius: 6px;
+  background: #fff;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: auto;
+  font-size: 0.875rem;
+}
+
+th,
+td {
+  padding: 0.55rem 0.65rem;
+  text-align: left;
+  border-bottom: 1px solid #e6eaf0;
+  vertical-align: top;
+}
+
+th:first-child,
+td:first-child {
+  min-width: 9rem;
+  max-width: 14rem;
+  white-space: normal;
+  word-break: break-word;
+}
+
+th {
+  background: #f7f8fa;
+  font-weight: 600;
+  color: #334155;
+  white-space: nowrap;
+}
+
+tbody tr:last-child td {
+  border-bottom: none;
+}
+
+tbody tr:hover {
+  background: #f8fafc;
+}
+
+.name-link {
+  color: #1f3a5f;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.name-link:hover {
+  text-decoration: underline;
+}
+
+.actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  align-items: stretch;
+  min-width: 6.75rem;
+  width: 6.75rem;
+}
+
+.actions ::ng-deep .p-button {
+  width: 100%;
+  justify-content: center;
+}
+
+.pipeline {
+  max-width: 12rem;
+  color: #475569;
+  font-size: 0.85rem;
+  line-height: 1.35;
+}
+
+.config-summary {
+  max-width: none;
+  color: #475569;
+  font-size: 0.75rem;
+  line-height: 1.35;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  word-break: break-word;
+}
+
+.date-cell {
+  white-space: nowrap;
+  font-size: 0.8rem;
+  color: #475569;
+}
