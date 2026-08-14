@@ -1,10 +1,7 @@
-/** One selected component + its config (create/update request body). */
 export interface ComponentInstance {
   componentId: string;
   config?: Record<string, unknown>;
 }
-
-/** Request body for POST /api/flows and (partial) PATCH /api/flows/:id */
 export interface CreateFlowRequest {
   name: string;
   consumer: ComponentInstance;
@@ -14,7 +11,6 @@ export interface CreateFlowRequest {
 
 export type UpdateFlowRequest = Partial<CreateFlowRequest>;
 
-/** Persisted service step returned with a flow. */
 export interface FlowStep {
   id: string;
   flowId: string;
@@ -22,8 +18,6 @@ export interface FlowStep {
   order: number;
   config: Record<string, unknown>;
 }
-
-/** Shape returned by GET /api/flows and GET /api/flows/:id */
 export interface Flow {
   id: string;
   name: string;

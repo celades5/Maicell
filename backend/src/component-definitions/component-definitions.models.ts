@@ -44,7 +44,6 @@ export interface ComponentDefinition {
   configFields: ComponentConfigField[];
 }
 
-/** Catalog entry shape we read from challenge-library.json indexes. */
 export interface LibraryIndexEntry {
   id: string;
   name: string;
