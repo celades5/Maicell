@@ -1,0 +1,50 @@
+# Maicell — toolchain versions (NOT a Python pip file)
+#
+# This challenge uses Node.js (NestJS + Angular), not Python.
+# Do not use: pip install / venv / pip requirements semantics.
+#
+# Install dependencies with:
+#   cd backend  && npm install
+#   cd frontend && npm install
+
+# Runtime / tools
+Node.js=v24.15.0
+npm=11.12.1
+Git=2.51.0
+Docker=28.4.0
+Docker_Compose=v2.39.2
+
+# Database (Docker Compose)
+PostgreSQL_image=postgres:16-alpine
+Host_port=8080
+Container_port=5432
+Database=MaicellDB
+
+# Backend (NestJS) — from backend/package.json
+@nestjs/common=^11.0.1
+@nestjs/config=^4.0.4
+@nestjs/core=^11.0.1
+@nestjs/typeorm=^11.0.3
+@nestjs/swagger=^11.4.6
+typeorm=^0.3.27
+pg=^8.22.0
+class-validator=^0.15.1
+class-transformer=^0.5.1
+TypeScript=^5.7.3
+Jest=^30.0.0
+supertest=^7.0.0
+
+# Frontend (Angular) — from frontend/package.json
+@angular/core=^19.2.0
+@angular/cli=^19.2.27
+primeng=^19.1.4
+@primeng/themes=^19.1.4
+primeicons=^8.0.0
+TypeScript_frontend=~5.7.2
+
+# Notes
+# - No pip packages are required for this project.
+# - Backend tests: cd backend && npm test / npm run test:e2e
+# - Frontend tests: cd frontend && npx ng test
+# - Start DB: docker compose up -d
+# - Exact versions are locked in package-lock.json files.
