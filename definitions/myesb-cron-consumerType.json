@@ -1,0 +1,82 @@
+{
+  "cron-expression": {
+    "name": "cron-expression",
+    "type": "",
+    "use": "optional",
+    "description": "The time between two polls in Cron format.",
+    "order": 3,
+    "appinfo": {
+      "fieldType": "cron",
+      "label": "Quartz Cron Expression",
+      "dynamic": true
+    }
+  },
+  "exception-handling": {
+    "name": "exception-handling",
+    "type": "exceptionHandlingType",
+    "use": "optional",
+    "description": "",
+    "order": 0,
+    "appinfo": {
+      "min": "1",
+      "max": "unbounded",
+      "sequencetemplate": {
+        "default-action": {
+          "name": "default-action",
+          "type": "string",
+          "use": "optional",
+          "description": "",
+          "order": 0,
+          "appinfo": { "label": "", "dynamic": true }
+        }
+      },
+      "sequence": true
+    }
+  },
+  "description": {
+    "name": "description",
+    "type": "string",
+    "use": "optional",
+    "description": "Description of component",
+    "order": 0,
+    "appinfo": {
+      "fieldType": "description",
+      "label": "Description",
+      "dynamic": true
+    }
+  },
+  "meta-data": {
+    "name": "meta-data",
+    "type": "metadataType",
+    "use": "optional",
+    "description": "",
+    "order": 0,
+    "appinfo": {
+      "min": "1",
+      "max": "unbounded",
+      "sequencetemplate": [],
+      "sequence": true
+    }
+  },
+  "id": {
+    "name": "id",
+    "type": "string",
+    "use": "required",
+    "description": "",
+    "order": 1,
+    "appinfo": { "label": "", "dynamic": true }
+  },
+  "autostart": {
+    "name": "autostart",
+    "type": "",
+    "use": "optional",
+    "description": "Consumer will be started at startup of interface.",
+    "order": 2,
+    "appinfo": {
+      "fieldType": "boolean",
+      "label": "Consumer autostart",
+      "defaultValue": "true",
+      "dynamic": true
+    }
+  }
+}

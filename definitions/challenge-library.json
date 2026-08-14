@@ -1,0 +1,1336 @@
+{
+    "datavalid": true,
+    "consumer": [
+        {
+            "elements": {
+                "myesb-rest-consumer": {
+                    "name": "myesb-rest-consumer",
+                    "type": "myesb-rest-consumerType",
+                    "use": "",
+                    "description": "This Consumer can be used to receive REST requests over HTTP(s). It is a request-response Consumer so the result of the Services will be sent back if the flow is closed with a reply-Producer. The Consumer can handle RESTful calls.",
+                    "order": 0,
+                    "appinfo": {
+                        "min": "1",
+                        "max": "1",
+                        "label": "REST Listener",
+                        "category": "Listeners",
+                        "reply": "required",
+                        "hidden": false,
+                        "deprecated": false
+                    }
+                },
+                "microsoft-mail-listener": {
+                    "name": "microsoft-mail-listener",
+                    "type": "microsoft-mail-listenerType",
+                    "use": "",
+                    "description": "This listener can be used to fetch mail from Microsoft Exchange Online.",
+                    "order": 0,
+                    "appinfo": {
+                        "min": "1",
+                        "max": "1",
+                        "label": "Microsoft Mail Listener",
+                        "category": "Listeners",
+                        "reply": "none",
+                        "hidden": false,
+                        "deprecated": false
+                    }
+                },
+                "myesb-cron-consumer": {
+                    "name": "myesb-cron-consumer",
+                    "type": "myesb-cron-consumerType",
+                    "use": "",
+                    "description": "This Consumer is used for running a service after a fixed amount of time. The output is a ConnectMessage with no content.",
+                    "order": 0,
+                    "appinfo": {
+                        "min": "1",
+                        "max": "1",
+                        "label": "Scheduler",
+                        "category": "Pollers",
+                        "reply": "none",
+                        "hidden": false,
+                        "deprecated": false
+                    }
+                },
+                "kafka-consumer": {
+                    "name": "kafka-consumer",
+                    "type": "kafka-consumerType",
+                    "use": "",
+                    "description": "This listener can be used to listen to Kafka topics.",
+                    "order": 0,
+                    "appinfo": {
+                        "min": "1",
+                        "max": "1",
+                        "label": "Kafka Listener",
+                        "category": "Listeners",
+                        "reply": "required",
+                        "hidden": false,
+                        "deprecated": false
+                    }
+                },
+                "myesb-ftp-consumer": {
+                    "name": "myesb-ftp-consumer",
+                    "type": "myesb-ftp-consumerType",
+                    "use": "",
+                    "description": "An FTP Consumer can read files from a FTP server. This supports plain FTP and SFTP (FTP by SSH). The component copies the files from the remote directory to a local one while retaining the original file name. After that the file is being sent to the Services. Read files can be backed up in a predefined directory.",
+                    "order": 0,
+                    "appinfo": {
+                        "min": "1",
+                        "max": "1",
+                        "label": "FTP Pickup",
+                        "category": "Readers",
+                        "reply": "none",
+                        "hidden": false,
+                        "deprecated": false
+                    }
+                },
+                "myesb-file-consumer": {
+                    "name": "myesb-file-consumer",
+                    "type": "myesb-file-consumerType",
+                    "use": "",
+                    "description": "This Consumer is used to read files in a flow, from the file system. Read files can be backed up in a predefined back-up directory. Use a cron-expression to poll on certain times. Consumer can also detect if files are still being written to. The output is a ConnectMessage in which the content of the file is being copied into a so called MessagePart.",
+                    "order": 0,
+                    "appinfo": {
+                        "min": "1",
+                        "max": "1",
+                        "label": "File Pickup",
+                        "category": "Readers",
+                        "reply": "none",
+                        "hidden": false,
+                        "deprecated": false
+                    }
+                }
+            },
+            "appinfo": {
+                "min": "0",
+                "max": "1"
+            }
+        },
+        {
+            "elements": {
+                "myesb-channel-proxy-consumer": {
+                    "name": "myesb-channel-proxy-consumer",
+                    "type": "myesb-channel-proxy-consumerType",
+                    "use": "",
+                    "description": "Acts as a flow endpoint. This endpoint can be called by wire taps and routers.",
+                    "order": 0,
+                    "appinfo": {
+                        "min": "1",
+                        "max": "1",
+                        "label": "Flow Proxy",
+                        "category": "Proxies",
+                        "reply": "optional",
+                        "hidden": false,
+                        "deprecated": false
+                    }
+                }
+            },
+            "appinfo": {
+                "min": "0",
+                "max": "1"
+            }
+        },
+        {
+            "elements": {
+                "analyze-wiretap": {
+                    "name": "analyze-wiretap",
+                    "type": "analyze-wiretapType",
+                    "use": "",
+                    "description": "Defines a ConnectPlaza Analyze Wiretap.",
+                    "order": 0,
+                    "appinfo": {
+                        "min": "1",
+                        "max": "1",
+                        "label": "Analyze Wiretap",
+                        "category": "Wiretaps",
+                        "reply": "none",
+                        "hidden": false,
+                        "deprecated": false
+                    }
+                },
+                "wiretap": {
+                    "name": "wiretap",
+                    "type": "wiretapType",
+                    "use": "",
+                    "description": "This wiretap will clone the passing message to the configured flow.",
+                    "order": 0,
+                    "appinfo": {
+                        "min": "1",
+                        "max": "1",
+                        "label": "Message Copy",
+                        "category": "Wiretaps",
+                        "reply": "none",
+                        "hidden": false,
+                        "deprecated": false
+                    }
+                },
+                "notification-wiretap": {
+                    "name": "notification-wiretap",
+                    "type": "notificationWiretapType",
+                    "use": "",
+                    "description": "Defines a ConnectPlaza Notification Wiretap placed somewhere in the Services tag.",
+                    "order": 0,
+                    "appinfo": {
+                        "min": "1",
+                        "max": "1",
+                        "label": "JMX Notification",
+                        "category": "",
+                        "reply": "none",
+                        "hidden": true,
+                        "deprecated": false
+                    }
+                },
+                "analyse-wiretap": {
+                    "name": "analyse-wiretap",
+                    "type": "analyze-wiretapType",
+                    "use": "",
+                    "description": "Deprecated in favor of the analyze-wiretap element.",
+                    "order": 0,
+                    "appinfo": {
+                        "min": "1",
+                        "max": "1",
+                        "label": "",
+                        "category": "",
+                        "reply": "none",
+                        "hidden": true,
+                        "deprecated": false
+                    }
+                }
+            },
+            "appinfo": {
+                "min": "0",
+                "max": "unbounded"
+            }
+        }
+    ],
+    "services": [
+        {
+            "elements": {
+                "myesb-filereader-service": {
+                    "name": "myesb-filereader-service",
+                    "type": "myesb-filereader-serviceType",
+                    "use": "",
+                    "description": "Service to read a static file into a ConnectMessagePart.",
+                    "order": 0,
+                    "appinfo": {
+                        "min": "1",
+                        "max": "1",
+                        "label": "File Reader Service",
+                        "category": "File Handlers",
+                        "reply": "",
+                        "hidden": false,
+                        "deprecated": false
+                    }
+                },
+                "myesb-http-outbound-service": {
+                    "name": "myesb-http-outbound-service",
+                    "type": "myesb-http-outbound-serviceType",
+                    "use": "",
+                    "description": "Service for invoking an HTTP service (REST) and waiting for the response.",
+                    "order": 0,
+                    "appinfo": {
+                        "min": "1",
+                        "max": "1",
+                        "label": "HTTP Gateway",
+                        "category": "Gateways",
+                        "reply": "",
+                        "hidden": false,
+                        "deprecated": false
+                    }
+                },
+                "notification-wiretap": {
+                    "name": "notification-wiretap",
+                    "type": "notificationWiretapType",
+                    "use": "",
+                    "description": "Defines a ConnectPlaza Notification Wiretap placed somewhere in the Services tag.",
+                    "order": 0,
+                    "appinfo": {
+                        "min": "1",
+                        "max": "1",
+                        "label": "JMX Notification",
+                        "category": "",
+                        "reply": "",
+                        "hidden": true,
+                        "deprecated": false
+                    }
+                },
+                "analyze-wiretap": {
+                    "name": "analyze-wiretap",
+                    "type": "analyze-wiretapType",
+                    "use": "",
+                    "description": "Defines a ConnectPlaza Analyze Wiretap.",
+                    "order": 0,
+                    "appinfo": {
+                        "min": "1",
+                        "max": "1",
+                        "label": "Analyze Wiretap",
+                        "category": "Wiretaps",
+                        "reply": "",
+                        "hidden": false,
+                        "deprecated": false
+                    }
+                },
+                "microsoft-mail-sender": {
+                    "name": "microsoft-mail-sender",
+                    "type": "microsoft-mail-senderType",
+                    "use": "",
+                    "description": "Service for sending mail using Microsoft Exchange Online.",
+                    "order": 0,
+                    "appinfo": {
+                        "min": "1",
+                        "max": "1",
+                        "label": "Microsoft Mail Sender",
+                        "category": "Senders",
+                        "reply": "",
+                        "hidden": false,
+                        "deprecated": false
+                    }
+                },
+                "header-enricher-v2": {
+                    "name": "header-enricher-v2",
+                    "type": "myesb-header-enricher-v2Type",
+                    "use": "",
+                    "description": "Service to add, update or delete headers. Note that these operations are executed sequentially. So the order of the operations is important.",
+                    "order": 0,
+                    "appinfo": {
+                        "min": "1",
+                        "max": "1",
+                        "label": "Header Enricher Version 2",
+                        "category": "Enrichers",
+                        "reply": "",
+                        "hidden": false,
+                        "deprecated": false
+                    }
+                },
+                "oauth2-gateway": {
+                    "name": "oauth2-gateway",
+                    "type": "oauth2-gatewayType",
+                    "use": "",
+                    "description": "Service for sending REST requests to an OAuth2/OIDC protected resource server.",
+                    "order": 0,
+                    "appinfo": {
+                        "min": "1",
+                        "max": "1",
+                        "label": "OAuth2 Gateway",
+                        "category": "Gateways",
+                        "reply": "",
+                        "hidden": false,
+                        "deprecated": false
+                    }
+                },
+                "wiretap": {
+                    "name": "wiretap",
+                    "type": "wiretapType",
+                    "use": "",
+                    "description": "This wiretap will clone the passing message to the configured flow.",
+                    "order": 0,
+                    "appinfo": {
+                        "min": "1",
+                        "max": "1",
+                        "label": "Message Copy",
+                        "category": "Wiretaps",
+                        "reply": "",
+                        "hidden": false,
+                        "deprecated": false
+                    }
+                },
+                "mapforce-service-v2": {
+                    "name": "mapforce-service-v2",
+                    "type": "myesb-mapforce-service-v2Type",
+                    "use": "",
+                    "description": "Service to invoke a MapForce generated mapping.",
+                    "order": 0,
+                    "appinfo": {
+                        "min": "1",
+                        "max": "1",
+                        "label": "MapForce Service V2",
+                        "category": "Converters",
+                        "reply": "",
+                        "hidden": false,
+                        "deprecated": false
+                    }
+                },
+                "myesb-xml2json-transformer": {
+                    "name": "myesb-xml2json-transformer",
+                    "type": "myesb-xml2json-transformerType",
+                    "use": "",
+                    "description": "Service to transform XML to JSON notation. No POJO classes required, XML will be directly transformed into JSON.",
+                    "order": 0,
+                    "appinfo": {
+                        "min": "1",
+                        "max": "1",
+                        "label": "XML to JSON Transformer",
+                        "category": "Transformers",
+                        "reply": "",
+                        "hidden": false,
+                        "deprecated": false
+                    }
+                },
+                "analyse-wiretap": {
+                    "name": "analyse-wiretap",
+                    "type": "analyze-wiretapType",
+                    "use": "",
+                    "description": "Deprecated in favor of the analyze-wiretap element.",
+                    "order": 0,
+                    "appinfo": {
+                        "min": "1",
+                        "max": "1",
+                        "label": "",
+                        "category": "",
+                        "reply": "",
+                        "hidden": true,
+                        "deprecated": false
+                    }
+                }
+            },
+            "appinfo": {
+                "min": "0",
+                "max": "unbounded"
+            }
+        }
+    ],
+    "producer": [
+        {
+            "elements": {
+                "analyze-wiretap": {
+                    "name": "analyze-wiretap",
+                    "type": "analyze-wiretapType",
+                    "use": "",
+                    "description": "Defines a ConnectPlaza Analyze Wiretap.",
+                    "order": 0,
+                    "appinfo": {
+                        "min": "1",
+                        "max": "1",
+                        "label": "Analyze Wiretap",
+                        "category": "Wiretaps",
+                        "reply": "",
+                        "hidden": false,
+                        "deprecated": false
+                    }
+                },
+                "wiretap": {
+                    "name": "wiretap",
+                    "type": "wiretapType",
+                    "use": "",
+                    "description": "This wiretap will clone the passing message to the configured flow.",
+                    "order": 0,
+                    "appinfo": {
+                        "min": "1",
+                        "max": "1",
+                        "label": "Message Copy",
+                        "category": "Wiretaps",
+                        "reply": "",
+                        "hidden": false,
+                        "deprecated": false
+                    }
+                },
+                "notification-wiretap": {
+                    "name": "notification-wiretap",
+                    "type": "notificationWiretapType",
+                    "use": "",
+                    "description": "Defines a ConnectPlaza Notification Wiretap placed somewhere in the Services tag.",
+                    "order": 0,
+                    "appinfo": {
+                        "min": "1",
+                        "max": "1",
+                        "label": "JMX Notification",
+                        "category": "",
+                        "reply": "",
+                        "hidden": true,
+                        "deprecated": false
+                    }
+                },
+                "analyse-wiretap": {
+                    "name": "analyse-wiretap",
+                    "type": "analyze-wiretapType",
+                    "use": "",
+                    "description": "Deprecated in favor of the analyze-wiretap element.",
+                    "order": 0,
+                    "appinfo": {
+                        "min": "1",
+                        "max": "1",
+                        "label": "",
+                        "category": "",
+                        "reply": "",
+                        "hidden": true,
+                        "deprecated": false
+                    }
+                }
+            },
+            "appinfo": {
+                "min": "0",
+                "max": "unbounded"
+            }
+        },
+        {
+            "elements": {
+                "myesb-file-producer": {
+                    "name": "myesb-file-producer",
+                    "type": "myesb-file-producerType",
+                    "use": "",
+                    "description": "Producer to write a file to disk.",
+                    "order": 0,
+                    "appinfo": {
+                        "min": "1",
+                        "max": "1",
+                        "label": "File Drop",
+                        "category": "Droppers",
+                        "reply": "",
+                        "hidden": false,
+                        "deprecated": false
+                    }
+                },
+                "kafka-producer": {
+                    "name": "kafka-producer",
+                    "type": "kafka-producerType",
+                    "use": "",
+                    "description": "Sender to send Kafka messages.",
+                    "order": 0,
+                    "appinfo": {
+                        "min": "1",
+                        "max": "1",
+                        "label": "Kafka Sender",
+                        "category": "Senders",
+                        "reply": "",
+                        "hidden": false,
+                        "deprecated": false
+                    }
+                }
+            },
+            "appinfo": {
+                "min": "0",
+                "max": "1"
+            }
+        }
+    ],
+    "consumer_index": {
+        "myesb-rest-consumer": {
+            "id": "myesb-rest-consumer",
+            "name": "REST Listener",
+            "description": "This Consumer can be used to receive REST requests over HTTP(s). It is a request-response Consumer so the result of the Services will be sent back if the flow is closed with a reply-Producer. The Consumer can handle RESTful calls.",
+            "type": "myesb-rest-consumerType",
+            "group": 0,
+            "category": "Listeners",
+            "hidden": false,
+            "deprecated": false,
+            "licensed": false,
+            "hasrole": true
+        },
+        "microsoft-mail-listener": {
+            "id": "microsoft-mail-listener",
+            "name": "Microsoft Mail Listener",
+            "description": "This listener can be used to fetch mail from Microsoft Exchange Online.",
+            "type": "microsoft-mail-listenerType",
+            "group": 0,
+            "category": "Listeners",
+            "hidden": false,
+            "deprecated": false,
+            "licensed": false,
+            "hasrole": true
+        },
+        "myesb-cron-consumer": {
+            "id": "myesb-cron-consumer",
+            "name": "Scheduler",
+            "description": "This Consumer is used for running a service after a fixed amount of time. The output is a ConnectMessage with no content.",
+            "type": "myesb-cron-consumerType",
+            "group": 0,
+            "category": "Pollers",
+            "hidden": false,
+            "deprecated": false,
+            "licensed": false,
+            "hasrole": true
+        },
+        "kafka-consumer": {
+            "id": "kafka-consumer",
+            "name": "Kafka Listener",
+            "description": "This listener can be used to listen to Kafka topics.",
+            "type": "kafka-consumerType",
+            "group": 0,
+            "category": "Listeners",
+            "hidden": false,
+            "deprecated": false,
+            "licensed": false,
+            "hasrole": true
+        },
+        "myesb-ftp-consumer": {
+            "id": "myesb-ftp-consumer",
+            "name": "FTP Pickup",
+            "description": "An FTP Consumer can read files from a FTP server. This supports plain FTP and SFTP (FTP by SSH). The component copies the files from the remote directory to a local one while retaining the original file name. After that the file is being sent to the Services. Read files can be backed up in a predefined directory.",
+            "type": "myesb-ftp-consumerType",
+            "group": 0,
+            "category": "Readers",
+            "hidden": false,
+            "deprecated": false,
+            "licensed": false,
+            "hasrole": true
+        },
+        "myesb-file-consumer": {
+            "id": "myesb-file-consumer",
+            "name": "File Pickup",
+            "description": "This Consumer is used to read files in a flow, from the file system. Read files can be backed up in a predefined back-up directory. Use a cron-expression to poll on certain times. Consumer can also detect if files are still being written to. The output is a ConnectMessage in which the content of the file is being copied into a so called MessagePart.",
+            "type": "myesb-file-consumerType",
+            "group": 0,
+            "category": "Readers",
+            "hidden": false,
+            "deprecated": false,
+            "licensed": false,
+            "hasrole": true
+        },
+        "myesb-channel-proxy-consumer": {
+            "id": "myesb-channel-proxy-consumer",
+            "name": "Flow Proxy",
+            "description": "Acts as a flow endpoint. This endpoint can be called by wire taps and routers.",
+            "type": "myesb-channel-proxy-consumerType",
+            "group": 1,
+            "category": "Proxies",
+            "hidden": false,
+            "deprecated": false,
+            "licensed": false,
+            "hasrole": true
+        },
+        "analyze-wiretap": {
+            "id": "analyze-wiretap",
+            "name": "Analyze Wiretap",
+            "description": "Defines a ConnectPlaza Analyze Wiretap.",
+            "type": "analyze-wiretapType",
+            "group": 2,
+            "category": "Wiretaps",
+            "hidden": false,
+            "deprecated": false,
+            "licensed": false,
+            "hasrole": true
+        },
+        "wiretap": {
+            "id": "wiretap",
+            "name": "Message Copy",
+            "description": "This wiretap will clone the passing message to the configured flow.",
+            "type": "wiretapType",
+            "group": 2,
+            "category": "Wiretaps",
+            "hidden": false,
+            "deprecated": false,
+            "licensed": false,
+            "hasrole": true
+        },
+        "notification-wiretap": {
+            "id": "notification-wiretap",
+            "name": "JMX Notification",
+            "description": "Defines a ConnectPlaza Notification Wiretap placed somewhere in the Services tag.",
+            "type": "notificationWiretapType",
+            "group": 2,
+            "category": "",
+            "hidden": true,
+            "deprecated": false,
+            "licensed": false,
+            "hasrole": true
+        },
+        "analyse-wiretap": {
+            "id": "analyse-wiretap",
+            "name": "",
+            "description": "Deprecated in favor of the analyze-wiretap element.",
+            "type": "analyze-wiretapType",
+            "group": 2,
+            "category": "",
+            "hidden": true,
+            "deprecated": false,
+            "licensed": false,
+            "hasrole": true
+        }
+    },
+    "consumer_library": {
+        "Readers": {
+            "name": "Readers",
+            "open": false,
+            "data": {
+                "myesb-ftp-consumer": {
+                    "id": "myesb-ftp-consumer",
+                    "name": "FTP Pickup",
+                    "description": "An FTP Consumer can read files from a FTP server. This supports plain FTP and SFTP (FTP by SSH). The component copies the files from the remote directory to a local one while retaining the original file name. After that the file is being sent to the Services. Read files can be backed up in a predefined directory.",
+                    "type": "myesb-ftp-consumerType",
+                    "group": 0,
+                    "category": "Readers",
+                    "hidden": false,
+                    "deprecated": false,
+                    "licensed": false,
+                    "hasrole": true
+                },
+                "myesb-file-consumer": {
+                    "id": "myesb-file-consumer",
+                    "name": "File Pickup",
+                    "description": "This Consumer is used to read files in a flow, from the file system. Read files can be backed up in a predefined back-up directory. Use a cron-expression to poll on certain times. Consumer can also detect if files are still being written to. The output is a ConnectMessage in which the content of the file is being copied into a so called MessagePart.",
+                    "type": "myesb-file-consumerType",
+                    "group": 0,
+                    "category": "Readers",
+                    "hidden": false,
+                    "deprecated": false,
+                    "licensed": false,
+                    "hasrole": true
+                }
+            }
+        },
+        "Listeners": {
+            "name": "Listeners",
+            "open": false,
+            "data": {
+                "myesb-rest-consumer": {
+                    "id": "myesb-rest-consumer",
+                    "name": "REST Listener",
+                    "description": "This Consumer can be used to receive REST requests over HTTP(s). It is a request-response Consumer so the result of the Services will be sent back if the flow is closed with a reply-Producer. The Consumer can handle RESTful calls.",
+                    "type": "myesb-rest-consumerType",
+                    "group": 0,
+                    "category": "Listeners",
+                    "hidden": false,
+                    "deprecated": false,
+                    "licensed": false,
+                    "hasrole": true
+                },
+                "microsoft-mail-listener": {
+                    "id": "microsoft-mail-listener",
+                    "name": "Microsoft Mail Listener",
+                    "description": "This listener can be used to fetch mail from Microsoft Exchange Online.",
+                    "type": "microsoft-mail-listenerType",
+                    "group": 0,
+                    "category": "Listeners",
+                    "hidden": false,
+                    "deprecated": false,
+                    "licensed": false,
+                    "hasrole": true
+                },
+                "kafka-consumer": {
+                    "id": "kafka-consumer",
+                    "name": "Kafka Listener",
+                    "description": "This listener can be used to listen to Kafka topics.",
+                    "type": "kafka-consumerType",
+                    "group": 0,
+                    "category": "Listeners",
+                    "hidden": false,
+                    "deprecated": false,
+                    "licensed": false,
+                    "hasrole": true
+                }
+            }
+        },
+        "Custom": {
+            "name": "Custom",
+            "open": false,
+            "data": {}
+        },
+        "Pollers": {
+            "name": "Pollers",
+            "open": false,
+            "data": {
+                "myesb-cron-consumer": {
+                    "id": "myesb-cron-consumer",
+                    "name": "Scheduler",
+                    "description": "This Consumer is used for running a service after a fixed amount of time. The output is a ConnectMessage with no content.",
+                    "type": "myesb-cron-consumerType",
+                    "group": 0,
+                    "category": "Pollers",
+                    "hidden": false,
+                    "deprecated": false,
+                    "licensed": false,
+                    "hasrole": true
+                }
+            }
+        },
+        "Proxies": {
+            "name": "Proxies",
+            "open": false,
+            "data": {
+                "myesb-channel-proxy-consumer": {
+                    "id": "myesb-channel-proxy-consumer",
+                    "name": "Flow Proxy",
+                    "description": "Acts as a flow endpoint. This endpoint can be called by wire taps and routers.",
+                    "type": "myesb-channel-proxy-consumerType",
+                    "group": 1,
+                    "category": "Proxies",
+                    "hidden": false,
+                    "deprecated": false,
+                    "licensed": false,
+                    "hasrole": true
+                }
+            }
+        },
+        "Wiretaps": {
+            "name": "Wiretaps",
+            "open": false,
+            "data": {
+                "analyze-wiretap": {
+                    "id": "analyze-wiretap",
+                    "name": "Analyze Wiretap",
+                    "description": "Defines a ConnectPlaza Analyze Wiretap.",
+                    "type": "analyze-wiretapType",
+                    "group": 2,
+                    "category": "Wiretaps",
+                    "hidden": false,
+                    "deprecated": false,
+                    "licensed": false,
+                    "hasrole": true
+                },
+                "wiretap": {
+                    "id": "wiretap",
+                    "name": "Message Copy",
+                    "description": "This wiretap will clone the passing message to the configured flow.",
+                    "type": "wiretapType",
+                    "group": 2,
+                    "category": "Wiretaps",
+                    "hidden": false,
+                    "deprecated": false,
+                    "licensed": false,
+                    "hasrole": true
+                }
+            }
+        }
+    },
+    "consumer_popular": {
+        "myesb-channel-proxy-consumer": {
+            "id": "myesb-channel-proxy-consumer",
+            "name": "Flow Proxy",
+            "description": "Acts as a flow endpoint. This endpoint can be called by wire taps and routers.",
+            "type": "myesb-channel-proxy-consumerType",
+            "group": 1,
+            "category": "Proxies",
+            "hidden": false,
+            "deprecated": false,
+            "licensed": false,
+            "hasrole": true
+        },
+        "myesb-cron-consumer": {
+            "id": "myesb-cron-consumer",
+            "name": "Scheduler",
+            "description": "This Consumer is used for running a service after a fixed amount of time. The output is a ConnectMessage with no content.",
+            "type": "myesb-cron-consumerType",
+            "group": 0,
+            "category": "Pollers",
+            "hidden": false,
+            "deprecated": false,
+            "licensed": false,
+            "hasrole": true
+        }
+    },
+    "services_index": {
+        "myesb-filereader-service": {
+            "id": "myesb-filereader-service",
+            "name": "File Reader Service",
+            "description": "Service to read a static file into a ConnectMessagePart.",
+            "type": "myesb-filereader-serviceType",
+            "group": 0,
+            "category": "File Handlers",
+            "hidden": false,
+            "deprecated": false,
+            "licensed": false,
+            "hasrole": true
+        },
+        "myesb-http-outbound-service": {
+            "id": "myesb-http-outbound-service",
+            "name": "HTTP Gateway",
+            "description": "Service for invoking an HTTP service (REST) and waiting for the response.",
+            "type": "myesb-http-outbound-serviceType",
+            "group": 0,
+            "category": "Gateways",
+            "hidden": false,
+            "deprecated": false,
+            "licensed": false,
+            "hasrole": true
+        },
+        "notification-wiretap": {
+            "id": "notification-wiretap",
+            "name": "JMX Notification",
+            "description": "Defines a ConnectPlaza Notification Wiretap placed somewhere in the Services tag.",
+            "type": "notificationWiretapType",
+            "group": 0,
+            "category": "",
+            "hidden": true,
+            "deprecated": false,
+            "licensed": false,
+            "hasrole": true
+        },
+        "analyze-wiretap": {
+            "id": "analyze-wiretap",
+            "name": "Analyze Wiretap",
+            "description": "Defines a ConnectPlaza Analyze Wiretap.",
+            "type": "analyze-wiretapType",
+            "group": 0,
+            "category": "Wiretaps",
+            "hidden": false,
+            "deprecated": false,
+            "licensed": false,
+            "hasrole": true
+        },
+        "microsoft-mail-sender": {
+            "id": "microsoft-mail-sender",
+            "name": "Microsoft Mail Sender",
+            "description": "Service for sending mail using Microsoft Exchange Online.",
+            "type": "microsoft-mail-senderType",
+            "group": 0,
+            "category": "Senders",
+            "hidden": false,
+            "deprecated": false,
+            "licensed": false,
+            "hasrole": true
+        },
+        "header-enricher-v2": {
+            "id": "header-enricher-v2",
+            "name": "Header Enricher Version 2",
+            "description": "Service to add, update or delete headers. Note that these operations are executed sequentially. So the order of the operations is important.",
+            "type": "myesb-header-enricher-v2Type",
+            "group": 0,
+            "category": "Enrichers",
+            "hidden": false,
+            "deprecated": false,
+            "licensed": false,
+            "hasrole": true
+        },
+        "oauth2-gateway": {
+            "id": "oauth2-gateway",
+            "name": "OAuth2 Gateway",
+            "description": "Service for sending REST requests to an OAuth2/OIDC protected resource server.",
+            "type": "oauth2-gatewayType",
+            "group": 0,
+            "category": "Gateways",
+            "hidden": false,
+            "deprecated": false,
+            "licensed": false,
+            "hasrole": true
+        },
+        "wiretap": {
+            "id": "wiretap",
+            "name": "Message Copy",
+            "description": "This wiretap will clone the passing message to the configured flow.",
+            "type": "wiretapType",
+            "group": 0,
+            "category": "Wiretaps",
+            "hidden": false,
+            "deprecated": false,
+            "licensed": false,
+            "hasrole": true
+        },
+        "mapforce-service-v2": {
+            "id": "mapforce-service-v2",
+            "name": "MapForce Service V2",
+            "description": "Service to invoke a MapForce generated mapping.",
+            "type": "myesb-mapforce-service-v2Type",
+            "group": 0,
+            "category": "Converters",
+            "hidden": false,
+            "deprecated": false,
+            "licensed": false,
+            "hasrole": true
+        },
+        "myesb-xml2json-transformer": {
+            "id": "myesb-xml2json-transformer",
+            "name": "XML to JSON Transformer",
+            "description": "Service to transform XML to JSON notation. No POJO classes required, XML will be directly transformed into JSON.",
+            "type": "myesb-xml2json-transformerType",
+            "group": 0,
+            "category": "Transformers",
+            "hidden": false,
+            "deprecated": false,
+            "licensed": false,
+            "hasrole": true
+        },
+        "analyse-wiretap": {
+            "id": "analyse-wiretap",
+            "name": "",
+            "description": "Deprecated in favor of the analyze-wiretap element.",
+            "type": "analyze-wiretapType",
+            "group": 0,
+            "category": "",
+            "hidden": true,
+            "deprecated": false,
+            "licensed": false,
+            "hasrole": true
+        }
+    },
+    "services_library": {
+        "File Handlers": {
+            "name": "File Handlers",
+            "open": false,
+            "data": {
+                "myesb-filereader-service": {
+                    "id": "myesb-filereader-service",
+                    "name": "File Reader Service",
+                    "description": "Service to read a static file into a ConnectMessagePart.",
+                    "type": "myesb-filereader-serviceType",
+                    "group": 0,
+                    "category": "File Handlers",
+                    "hidden": false,
+                    "deprecated": false,
+                    "licensed": false,
+                    "hasrole": true
+                }
+            }
+        },
+        "Aggregators": {
+            "name": "Aggregators",
+            "open": false,
+            "data": {}
+        },
+        "Enrichers": {
+            "name": "Enrichers",
+            "open": false,
+            "data": {
+                "header-enricher-v2": {
+                    "id": "header-enricher-v2",
+                    "name": "Header Enricher Version 2",
+                    "description": "Service to add, update or delete headers. Note that these operations are executed sequentially. So the order of the operations is important.",
+                    "type": "myesb-header-enricher-v2Type",
+                    "group": 0,
+                    "category": "Enrichers",
+                    "hidden": false,
+                    "deprecated": false,
+                    "licensed": false,
+                    "hasrole": true
+                }
+            }
+        },
+        "Pollers": {
+            "name": "Pollers",
+            "open": false,
+            "data": {}
+        },
+        "Transformers": {
+            "name": "Transformers",
+            "open": false,
+            "data": {
+                "myesb-xml2json-transformer": {
+                    "id": "myesb-xml2json-transformer",
+                    "name": "XML to JSON Transformer",
+                    "description": "Service to transform XML to JSON notation. No POJO classes required, XML will be directly transformed into JSON.",
+                    "type": "myesb-xml2json-transformerType",
+                    "group": 0,
+                    "category": "Transformers",
+                    "hidden": false,
+                    "deprecated": false,
+                    "licensed": false,
+                    "hasrole": true
+                }
+            }
+        },
+        "Gateways": {
+            "name": "Gateways",
+            "open": false,
+            "data": {
+                "myesb-http-outbound-service": {
+                    "id": "myesb-http-outbound-service",
+                    "name": "HTTP Gateway",
+                    "description": "Service for invoking an HTTP service (REST) and waiting for the response.",
+                    "type": "myesb-http-outbound-serviceType",
+                    "group": 0,
+                    "category": "Gateways",
+                    "hidden": false,
+                    "deprecated": false,
+                    "licensed": false,
+                    "hasrole": true
+                },
+                "oauth2-gateway": {
+                    "id": "oauth2-gateway",
+                    "name": "OAuth2 Gateway",
+                    "description": "Service for sending REST requests to an OAuth2/OIDC protected resource server.",
+                    "type": "oauth2-gatewayType",
+                    "group": 0,
+                    "category": "Gateways",
+                    "hidden": false,
+                    "deprecated": false,
+                    "licensed": false,
+                    "hasrole": true
+                }
+            }
+        },
+        "Splitters": {
+            "name": "Splitters",
+            "open": false,
+            "data": {}
+        },
+        "Wiretaps": {
+            "name": "Wiretaps",
+            "open": false,
+            "data": {
+                "analyze-wiretap": {
+                    "id": "analyze-wiretap",
+                    "name": "Analyze Wiretap",
+                    "description": "Defines a ConnectPlaza Analyze Wiretap.",
+                    "type": "analyze-wiretapType",
+                    "group": 0,
+                    "category": "Wiretaps",
+                    "hidden": false,
+                    "deprecated": false,
+                    "licensed": false,
+                    "hasrole": true
+                },
+                "wiretap": {
+                    "id": "wiretap",
+                    "name": "Message Copy",
+                    "description": "This wiretap will clone the passing message to the configured flow.",
+                    "type": "wiretapType",
+                    "group": 0,
+                    "category": "Wiretaps",
+                    "hidden": false,
+                    "deprecated": false,
+                    "licensed": false,
+                    "hasrole": true
+                }
+            }
+        },
+        "Sleep": {
+            "name": "Sleep",
+            "open": false,
+            "data": {}
+        },
+        "Validators": {
+            "name": "Validators",
+            "open": false,
+            "data": {}
+        },
+        "Converters": {
+            "name": "Converters",
+            "open": false,
+            "data": {
+                "mapforce-service-v2": {
+                    "id": "mapforce-service-v2",
+                    "name": "MapForce Service V2",
+                    "description": "Service to invoke a MapForce generated mapping.",
+                    "type": "myesb-mapforce-service-v2Type",
+                    "group": 0,
+                    "category": "Converters",
+                    "hidden": false,
+                    "deprecated": false,
+                    "licensed": false,
+                    "hasrole": true
+                }
+            }
+        },
+        "Filters": {
+            "name": "Filters",
+            "open": false,
+            "data": {}
+        },
+        "Command Services": {
+            "name": "Command Services",
+            "open": false,
+            "data": {}
+        },
+        "Custom": {
+            "name": "Custom",
+            "open": false,
+            "data": {}
+        },
+        "Senders": {
+            "name": "Senders",
+            "open": false,
+            "data": {
+                "microsoft-mail-sender": {
+                    "id": "microsoft-mail-sender",
+                    "name": "Microsoft Mail Sender",
+                    "description": "Service for sending mail using Microsoft Exchange Online.",
+                    "type": "microsoft-mail-senderType",
+                    "group": 0,
+                    "category": "Senders",
+                    "hidden": false,
+                    "deprecated": false,
+                    "licensed": false,
+                    "hasrole": true
+                }
+            }
+        },
+        "Logger": {
+            "name": "Logger",
+            "open": false,
+            "data": {}
+        }
+    },
+    "services_popular": {
+        "analyze-wiretap": {
+            "id": "analyze-wiretap",
+            "name": "Analyze Wiretap",
+            "description": "Defines a ConnectPlaza Analyze Wiretap.",
+            "type": "analyze-wiretapType",
+            "group": 0,
+            "category": "Wiretaps",
+            "hidden": false,
+            "deprecated": false,
+            "licensed": false,
+            "hasrole": true
+        },
+        "header-enricher-v2": {
+            "id": "header-enricher-v2",
+            "name": "Header Enricher Version 2",
+            "description": "Service to add, update or delete headers. Note that these operations are executed sequentially. So the order of the operations is important.",
+            "type": "myesb-header-enricher-v2Type",
+            "group": 0,
+            "category": "Enrichers",
+            "hidden": false,
+            "deprecated": false,
+            "licensed": false,
+            "hasrole": true
+        }
+    },
+    "producer_index": {
+        "analyze-wiretap": {
+            "id": "analyze-wiretap",
+            "name": "Analyze Wiretap",
+            "description": "Defines a ConnectPlaza Analyze Wiretap.",
+            "type": "analyze-wiretapType",
+            "group": 0,
+            "category": "Wiretaps",
+            "hidden": false,
+            "deprecated": false,
+            "licensed": false,
+            "hasrole": true
+        },
+        "wiretap": {
+            "id": "wiretap",
+            "name": "Message Copy",
+            "description": "This wiretap will clone the passing message to the configured flow.",
+            "type": "wiretapType",
+            "group": 0,
+            "category": "Wiretaps",
+            "hidden": false,
+            "deprecated": false,
+            "licensed": false,
+            "hasrole": true
+        },
+        "notification-wiretap": {
+            "id": "notification-wiretap",
+            "name": "JMX Notification",
+            "description": "Defines a ConnectPlaza Notification Wiretap placed somewhere in the Services tag.",
+            "type": "notificationWiretapType",
+            "group": 0,
+            "category": "",
+            "hidden": true,
+            "deprecated": false,
+            "licensed": false,
+            "hasrole": true
+        },
+        "analyse-wiretap": {
+            "id": "analyse-wiretap",
+            "name": "",
+            "description": "Deprecated in favor of the analyze-wiretap element.",
+            "type": "analyze-wiretapType",
+            "group": 0,
+            "category": "",
+            "hidden": true,
+            "deprecated": false,
+            "licensed": false,
+            "hasrole": true
+        },
+        "myesb-file-producer": {
+            "id": "myesb-file-producer",
+            "name": "File Drop",
+            "description": "Producer to write a file to disk.",
+            "type": "myesb-file-producerType",
+            "group": 1,
+            "category": "Droppers",
+            "hidden": false,
+            "deprecated": false,
+            "licensed": false,
+            "hasrole": true
+        },
+        "kafka-producer": {
+            "id": "kafka-producer",
+            "name": "Kafka Sender",
+            "description": "Sender to send Kafka messages.",
+            "type": "kafka-producerType",
+            "group": 1,
+            "category": "Senders",
+            "hidden": false,
+            "deprecated": false,
+            "licensed": false,
+            "hasrole": true
+        }
+    },
+    "producer_library": {
+        "Wiretaps": {
+            "name": "Wiretaps",
+            "open": false,
+            "data": {
+                "analyze-wiretap": {
+                    "id": "analyze-wiretap",
+                    "name": "Analyze Wiretap",
+                    "description": "Defines a ConnectPlaza Analyze Wiretap.",
+                    "type": "analyze-wiretapType",
+                    "group": 0,
+                    "category": "Wiretaps",
+                    "hidden": false,
+                    "deprecated": false,
+                    "licensed": false,
+                    "hasrole": true
+                },
+                "wiretap": {
+                    "id": "wiretap",
+                    "name": "Message Copy",
+                    "description": "This wiretap will clone the passing message to the configured flow.",
+                    "type": "wiretapType",
+                    "group": 0,
+                    "category": "Wiretaps",
+                    "hidden": false,
+                    "deprecated": false,
+                    "licensed": false,
+                    "hasrole": true
+                }
+            }
+        },
+        "Droppers": {
+            "name": "Droppers",
+            "open": false,
+            "data": {
+                "myesb-file-producer": {
+                    "id": "myesb-file-producer",
+                    "name": "File Drop",
+                    "description": "Producer to write a file to disk.",
+                    "type": "myesb-file-producerType",
+                    "group": 1,
+                    "category": "Droppers",
+                    "hidden": false,
+                    "deprecated": false,
+                    "licensed": false,
+                    "hasrole": true
+                }
+            }
+        },
+        "Senders": {
+            "name": "Senders",
+            "open": false,
+            "data": {
+                "kafka-producer": {
+                    "id": "kafka-producer",
+                    "name": "Kafka Sender",
+                    "description": "Sender to send Kafka messages.",
+                    "type": "kafka-producerType",
+                    "group": 1,
+                    "category": "Senders",
+                    "hidden": false,
+                    "deprecated": false,
+                    "licensed": false,
+                    "hasrole": true
+                }
+            }
+        },
+        "Routers": {
+            "name": "Routers",
+            "open": false,
+            "data": {}
+        },
+        "Repliers": {
+            "name": "Repliers",
+            "open": false,
+            "data": {}
+        },
+        "Aggregators": {
+            "name": "Aggregators",
+            "open": false,
+            "data": {}
+        },
+        "Custom": {
+            "name": "Custom",
+            "open": false,
+            "data": {}
+        },
+        "Nullifiers": {
+            "name": "Nullifiers",
+            "open": false,
+            "data": {}
+        }
+    },
+    "producer_popular": {},
+    "runtime": 2.8159618377685547
+}
