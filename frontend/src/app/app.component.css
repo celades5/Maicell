@@ -1,0 +1,153 @@
+:host {
+  display: block;
+  min-height: 100vh;
+}
+
+.app {
+  display: flex;
+  align-items: stretch;
+  min-height: 100vh;
+  background: #f4f6f8;
+}
+
+.sidebar {
+  flex: 0 0 15.5rem;
+  width: 15.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1.25rem 1rem;
+  background: #12233a;
+  color: #e8eef7;
+}
+
+.sidebar-brand {
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  opacity: 0.7;
+  padding: 0 0.35rem;
+}
+
+.side-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.side-link {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 0.7rem 0.8rem;
+  border-radius: 8px;
+  color: #d7e2f2;
+  text-decoration: none;
+  font-size: 0.95rem;
+}
+
+.side-link:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.side-link.active {
+  background: rgba(255, 255, 255, 0.14);
+  color: #fff;
+  font-weight: 600;
+}
+
+.side-link-create {
+  background: #e8a317;
+  color: #1a1405;
+  font-weight: 600;
+}
+
+.side-link-create:hover {
+  background: #f0b429;
+  color: #1a1405;
+}
+
+.side-link-create.active {
+  background: #d4920f;
+  color: #1a1405;
+}
+
+.workspace {
+  flex: 1 1 auto;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.topbar {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.75rem 1.5rem;
+  background: #fff;
+  border-bottom: 1px solid #d9dee7;
+}
+
+.topbar-spacer {
+  min-width: 0;
+}
+
+.logo-link {
+  display: flex;
+  justify-content: center;
+  text-decoration: none;
+}
+
+.logo {
+  height: 2.75rem;
+  width: auto;
+  max-width: min(280px, 50vw);
+  object-fit: contain;
+}
+
+.topbar-date {
+  justify-self: end;
+  color: #334155;
+  font-size: 0.95rem;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.content {
+  flex: 1;
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  padding: 1.25rem 1.5rem 2.5rem;
+}
+
+@media (max-width: 720px) {
+  .app {
+    flex-direction: column;
+  }
+
+  .sidebar {
+    flex: none;
+    width: 100%;
+  }
+
+  .side-nav {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+
+  .topbar {
+    grid-template-columns: 1fr;
+    justify-items: center;
+    text-align: center;
+  }
+
+  .topbar-spacer {
+    display: none;
+  }
+
+  .topbar-date {
+    justify-self: center;
+  }
+}
