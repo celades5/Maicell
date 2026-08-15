@@ -7,7 +7,7 @@ services:
       POSTGRES_DB: ${POSTGRES_DB}
     ports:
       #- "${POSTGRES_PORT:-5432}:5432"
-      - "${POSTGRES_PORT:8080}:5432"
+      - "${POSTGRES_PORT:-8080}:5432"
     volumes:
       - db_data:/var/lib/postgresql/data
     healthcheck:
