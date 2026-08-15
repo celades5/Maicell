@@ -1,0 +1,12 @@
+**/node_modules
+**/dist
+**/coverage
+**/.angular
+**/.env
+**/*.log
+.git
+.gitignore
+README.md
+frontend
+docker-compose*.yml
+requirements.txt
