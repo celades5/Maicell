@@ -30,7 +30,7 @@ const serveAngular = existsSync(publicPath);
       ? [
           ServeStaticModule.forRoot({
             rootPath: publicPath,
-            exclude: ['/api/(.*)'],
+            exclude: ['/api/{*path}'],
           }),
         ]
       : []),
