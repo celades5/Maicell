@@ -15,6 +15,7 @@ RUN npm run build
 
 ENV NODE_ENV=production
 ENV DEFINITIONS_DIR=/app/definitions
+ENV DB_SYNCHRONIZE=true
 
 EXPOSE 3000
 CMD ["npm", "run", "start:prod"]
