@@ -27,6 +27,8 @@ import {
   replaceInstanceConfig,
 } from '../utils/flow-form.util';
 
+type FormMode = 'create' | 'edit' | 'view' | 'duplicate';
+
 interface FlowFormControls {
   name: FormControl<string>;
   consumer: FormGroup<ComponentInstanceForm>;
@@ -53,7 +55,24 @@ export class FlowFormPage implements OnInit {
   private readonly messages = inject(MessageService);
 
   readonly flowId = signal<string | null>(null);
-  readonly isEdit = computed(() => this.flowId() !== null);
+  readonly mode = signal<FormMode>('create');
+  readonly isEdit = computed(() => this.mode() === 'edit');
+  readonly isView = computed(() => this.mode() === 'view');
+  readonly isDuplicate = computed(() => this.mode() === 'duplicate');
+  readonly isReadOnly = computed(() => this.mode() === 'view');
+
+  readonly pageTitle = computed(() => {
+    switch (this.mode()) {
+      case 'edit':
+        return 'Edit flow';
+      case 'view':
+        return 'View flow';
+      case 'duplicate':
+        return 'Duplicate flow';
+      default:
+        return 'New flow';
+    }
+  });
 
   readonly definitions = signal<ComponentDefinition[]>([]);
   readonly loading = signal(true);
@@ -75,28 +94,31 @@ export class FlowFormPage implements OnInit {
 
   ngOnInit(): void {
     const id = this.route.snapshot.paramMap.get('id');
-    this.flowId.set(id);
+    const routeMode = this.route.snapshot.data['mode'] as FormMode | undefined;
 
-    if (id) {
-      forkJoin({
-        definitions: this.definitionsApi.getAll(),
-        flow: this.flowsApi.getById(id),
-      }).subscribe({
-        next: ({ definitions, flow }) => {
-          this.definitions.set(definitions);
-          const value = flowToFormValue(flow);
-          this.form = this.createForm(definitions, value);
-          this.loading.set(false);
-        },
-        error: (err: unknown) => {
-          this.feedback.set(parseApiFeedback(err));
-          this.loadFailed.set(true);
-          this.loading.set(false);
-        },
-      });
+    if (id && routeMode === 'view') {
+      this.mode.set('view');
+      this.flowId.set(id);
+      this.loadExisting(id, { clearName: false, readOnly: true });
       return;
     }
 
+    if (id && routeMode === 'duplicate') {
+      this.mode.set('duplicate');
+      this.flowId.set(id);
+      this.loadExisting(id, { clearName: true, readOnly: false });
+      return;
+    }
+
+    if (id) {
+      this.mode.set('edit');
+      this.flowId.set(id);
+      this.loadExisting(id, { clearName: false, readOnly: false });
+      return;
+    }
+
+    this.mode.set('create');
+    this.flowId.set(null);
     this.definitionsApi.getAll().subscribe({
       next: (definitions) => {
         this.definitions.set(definitions);
@@ -127,8 +149,15 @@ export class FlowFormPage implements OnInit {
     void this.router.navigate(['/flows']);
   }
 
+  goToEdit(): void {
+    const id = this.flowId();
+    if (id) {
+      void this.router.navigate(['/flows', id]);
+    }
+  }
+
   onConsumerChange(): void {
-    if (!this.form) {
+    if (!this.form || this.isReadOnly()) {
       return;
     }
     const componentId = this.form.controls.consumer.controls.componentId.value;
@@ -140,7 +169,7 @@ export class FlowFormPage implements OnInit {
   }
 
   onProducerChange(): void {
-    if (!this.form) {
+    if (!this.form || this.isReadOnly()) {
       return;
     }
     const componentId = this.form.controls.producer.controls.componentId.value;
@@ -152,12 +181,18 @@ export class FlowFormPage implements OnInit {
   }
 
   onServiceChange(index: number): void {
+    if (this.isReadOnly()) {
+      return;
+    }
     const group = this.serviceGroups.at(index);
     const componentId = group.controls.componentId.value;
     replaceInstanceConfig(group, this.definitionFor(componentId), false);
   }
 
   addService(): void {
+    if (this.isReadOnly()) {
+      return;
+    }
     const first = this.services()[0];
     this.serviceGroups.push(
       buildInstanceGroup(first, first ? { componentId: first.id } : undefined),
@@ -165,10 +200,16 @@ export class FlowFormPage implements OnInit {
   }
 
   removeService(index: number): void {
+    if (this.isReadOnly()) {
+      return;
+    }
     this.serviceGroups.removeAt(index);
   }
 
   moveService(index: number, offset: -1 | 1): void {
+    if (this.isReadOnly()) {
+      return;
+    }
     const target = index + offset;
     if (target < 0 || target >= this.serviceGroups.length) {
       return;
@@ -179,7 +220,7 @@ export class FlowFormPage implements OnInit {
   }
 
   submit(): void {
-    if (!this.form) {
+    if (!this.form || this.isReadOnly()) {
       return;
     }
 
@@ -219,15 +260,22 @@ export class FlowFormPage implements OnInit {
     this.saving.set(true);
     this.feedback.set(null);
 
-    const request$ = this.isEdit()
-      ? this.flowsApi.update(this.flowId()!, payload)
-      : this.flowsApi.create(payload);
+    const request$ =
+      this.mode() === 'edit'
+        ? this.flowsApi.update(this.flowId()!, payload)
+        : this.flowsApi.create(payload);
 
     request$.subscribe({
       next: () => {
         this.saving.set(false);
+        const saved =
+          this.mode() === 'edit'
+            ? 'updated'
+            : this.mode() === 'duplicate'
+              ? 'duplicated'
+              : 'created';
         void this.router.navigate(['/flows'], {
-          queryParams: { saved: this.isEdit() ? 'updated' : 'created' },
+          queryParams: { saved },
         });
       },
       error: (err: unknown) => {
@@ -236,6 +284,34 @@ export class FlowFormPage implements OnInit {
         this.feedback.set(feedback);
         this.showFeedbackToast(feedback);
         this.scrollToFeedback();
+      },
+    });
+  }
+
+  private loadExisting(
+    id: string,
+    options: { clearName: boolean; readOnly: boolean },
+  ): void {
+    forkJoin({
+      definitions: this.definitionsApi.getAll(),
+      flow: this.flowsApi.getById(id),
+    }).subscribe({
+      next: ({ definitions, flow }) => {
+        this.definitions.set(definitions);
+        const value = flowToFormValue(flow);
+        if (options.clearName) {
+          value.name = '';
+        }
+        this.form = this.createForm(definitions, value);
+        if (options.readOnly) {
+          this.form.disable({ emitEvent: false });
+        }
+        this.loading.set(false);
+      },
+      error: (err: unknown) => {
+        this.feedback.set(parseApiFeedback(err));
+        this.loadFailed.set(true);
+        this.loading.set(false);
       },
     });
   }
@@ -264,7 +340,6 @@ export class FlowFormPage implements OnInit {
     });
   }
 
-  /** Human-readable labels for invalid required controls. */
   private collectIncompleteFields(
     form: FormGroup<FlowFormControls>,
   ): string[] {

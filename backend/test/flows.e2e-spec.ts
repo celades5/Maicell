@@ -97,6 +97,24 @@ describe('Flows API (e2e)', () => {
         expect(body.some((flow: { id: string }) => flow.id === id)).toBe(true);
       });
 
+    const duplicateName = `${uniqueName}-copy`;
+    const duplicateRes = await request(app.getHttpServer())
+      .post(`/api/flows/${id}/duplicate`)
+      .send({ name: duplicateName })
+      .expect(201)
+      .expect(({ body }) => {
+        expect(body.name).toBe(duplicateName);
+        expect(body.id).not.toBe(id);
+        expect(body.consumerComponentId).toBe('myesb-cron-consumer');
+        expect(body.steps).toHaveLength(1);
+      });
+
+    const duplicateId = duplicateRes.body.id as string;
+
+    await request(app.getHttpServer())
+      .delete(`/api/flows/${duplicateId}`)
+      .expect(204);
+
     await request(app.getHttpServer()).delete(`/api/flows/${id}`).expect(204);
 
     await request(app.getHttpServer()).get(`/api/flows/${id}`).expect(404);

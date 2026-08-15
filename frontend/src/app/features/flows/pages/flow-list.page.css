@@ -149,16 +149,22 @@ tbody tr:hover {
 
 .actions {
   display: flex;
-  flex-direction: column;
-  gap: 0.4rem;
-  align-items: stretch;
-  min-width: 6.75rem;
-  width: 6.75rem;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  gap: 0.35rem;
+  align-items: center;
+  justify-content: flex-start;
+  min-width: 9.5rem;
+  width: auto;
+  white-space: nowrap;
 }
 
 .actions ::ng-deep .p-button {
-  width: 100%;
+  width: 2.15rem;
+  height: 2.15rem;
+  padding: 0;
   justify-content: center;
+  border-radius: 4px;
 }
 
 .pipeline {

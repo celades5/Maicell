@@ -19,6 +19,7 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { CreateFlowDto } from './dto/create-flow.dto';
+import { DuplicateFlowDto } from './dto/duplicate-flow.dto';
 import { UpdateFlowDto } from './dto/update-flow.dto';
 import { Flow } from './entities/flow.entity';
 import { FlowsService } from './flows.service';
@@ -48,6 +49,21 @@ export class FlowsController {
   @ApiCreatedResponse({ type: Flow })
   create(@Body() dto: CreateFlowDto): Promise<Flow> {
     return this.flowsService.create(dto);
+  }
+
+  @Post(':id/duplicate')
+  @ApiOperation({
+    summary: 'Duplicate a flow under a new unique name',
+    description:
+      'Copies consumer, services, and producer config from the source flow. Requires a new name to avoid 409 conflicts.',
+  })
+  @ApiCreatedResponse({ type: Flow })
+  @ApiNotFoundResponse({ description: 'Source flow not found' })
+  duplicate(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body() dto: DuplicateFlowDto,
+  ): Promise<Flow> {
+    return this.flowsService.duplicate(id, dto.name);
   }
 
   @Patch(':id')

@@ -99,5 +99,13 @@ describe('API HTTP services (mocked)', () => {
     );
     expect(deleteReq.request.method).toBe('DELETE');
     deleteReq.flush(null);
+
+    flowsApi.duplicate('flow-1', 'Flow copy').subscribe();
+    const duplicateReq = httpMock.expectOne(
+      `${environment.apiBaseUrl}/flows/flow-1/duplicate`,
+    );
+    expect(duplicateReq.request.method).toBe('POST');
+    expect(duplicateReq.request.body).toEqual({ name: 'Flow copy' });
+    duplicateReq.flush({ ...flow, id: 'flow-2', name: 'Flow copy' });
   });
 });

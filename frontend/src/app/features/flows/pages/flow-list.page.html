@@ -110,7 +110,7 @@
             @for (flow of displayedFlows(); track flow.id) {
               <tr>
                 <td>
-                  <a [routerLink]="['/flows', flow.id]" class="name-link">{{
+                  <a [routerLink]="['/flows', flow.id, 'view']" class="name-link">{{
                     flow.name
                   }}</a>
                 </td>
@@ -127,17 +127,39 @@
                 <td class="date-cell">{{ flow.updatedAt | date: 'dd/MM/yyyy' }}</td>
                 <td class="actions">
                   <p-button
-                    label="Edit"
+                    severity="info"
+                    size="small"
+                    icon="pi pi-eye"
+                    pTooltip="View"
+                    tooltipPosition="top"
+                    aria-label="View"
+                    (onClick)="viewFlow(flow.id)"
+                  />
+                  <p-button
                     severity="success"
                     size="small"
                     icon="pi pi-pencil"
+                    pTooltip="Edit"
+                    tooltipPosition="top"
+                    aria-label="Edit"
                     (onClick)="editFlow(flow.id)"
                   />
                   <p-button
-                    [label]="deletingId() === flow.id ? 'Deleting…' : 'Delete'"
+                    severity="warn"
+                    size="small"
+                    icon="pi pi-copy"
+                    pTooltip="Duplicate"
+                    tooltipPosition="top"
+                    aria-label="Duplicate"
+                    (onClick)="duplicateFlow(flow.id)"
+                  />
+                  <p-button
                     severity="danger"
                     size="small"
                     icon="pi pi-trash"
+                    pTooltip="Delete"
+                    tooltipPosition="top"
+                    aria-label="Delete"
                     [disabled]="deletingId() === flow.id"
                     [loading]="deletingId() === flow.id"
                     (onClick)="deleteFlow(flow)"

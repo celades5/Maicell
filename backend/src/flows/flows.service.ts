@@ -113,6 +113,27 @@ export class FlowsService {
     await this.flowsRepository.remove(flow);
   }
 
+  async duplicate(id: string, name: string): Promise<Flow> {
+    const source = await this.findOne(id);
+    const steps = [...(source.steps ?? [])].sort((a, b) => a.order - b.order);
+
+    return this.create({
+      name,
+      consumer: {
+        componentId: source.consumerComponentId,
+        config: { ...(source.consumerConfig ?? {}) },
+      },
+      services: steps.map((step) => ({
+        componentId: step.componentId,
+        config: { ...(step.config ?? {}) },
+      })),
+      producer: {
+        componentId: source.producerComponentId,
+        config: { ...(source.producerConfig ?? {}) },
+      },
+    });
+  }
+
   private mapServicesToSteps(services: ComponentInstanceDto[]): FlowStep[] {
     return services.map((service, index) =>
       this.flowStepsRepository.create({

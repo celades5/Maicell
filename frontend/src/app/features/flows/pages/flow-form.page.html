@@ -2,7 +2,15 @@
   <header class="page-header">
     <div>
       <a routerLink="/flows" class="back">← Flows</a>
-      <h2>{{ isEdit() ? 'Edit flow' : 'New flow' }}</h2>
+      <h2>{{ pageTitle() }}</h2>
+      @if (isDuplicate()) {
+        <p class="mode-hint">
+          Copied from an existing flow. Enter a new unique name before saving.
+        </p>
+      }
+      @if (isView()) {
+        <p class="mode-hint">Read-only view. Use Edit to make changes.</p>
+      }
     </div>
   </header>
 
@@ -103,13 +111,15 @@
               once.
             </p>
           </div>
-          <p-button
-            type="button"
-            label="Add service"
-            icon="pi pi-plus"
-            severity="success"
-            (onClick)="addService()"
-          />
+          @if (!isView()) {
+            <p-button
+              type="button"
+              label="Add service"
+              icon="pi pi-plus"
+              severity="success"
+              (onClick)="addService()"
+            />
+          }
         </div>
 
         @if (serviceGroups.length === 0) {
@@ -125,35 +135,37 @@
             <article class="service-card" [formGroupName]="i">
               <header class="service-header">
                 <strong>Service {{ i + 1 }}</strong>
-                <div class="service-actions">
-                  <p-button
-                    type="button"
-                    label="Up"
-                    icon="pi pi-arrow-up"
-                    [text]="true"
-                    size="small"
-                    [disabled]="i === 0"
-                    (onClick)="moveService(i, -1)"
-                  />
-                  <p-button
-                    type="button"
-                    label="Down"
-                    icon="pi pi-arrow-down"
-                    [text]="true"
-                    size="small"
-                    [disabled]="i === serviceGroups.length - 1"
-                    (onClick)="moveService(i, 1)"
-                  />
-                  <p-button
-                    type="button"
-                    label="Remove"
-                    icon="pi pi-trash"
-                    severity="danger"
-                    [text]="true"
-                    size="small"
-                    (onClick)="removeService(i)"
-                  />
-                </div>
+                @if (!isView()) {
+                  <div class="service-actions">
+                    <p-button
+                      type="button"
+                      label="Up"
+                      icon="pi pi-arrow-up"
+                      [text]="true"
+                      size="small"
+                      [disabled]="i === 0"
+                      (onClick)="moveService(i, -1)"
+                    />
+                    <p-button
+                      type="button"
+                      label="Down"
+                      icon="pi pi-arrow-down"
+                      [text]="true"
+                      size="small"
+                      [disabled]="i === serviceGroups.length - 1"
+                      (onClick)="moveService(i, 1)"
+                    />
+                    <p-button
+                      type="button"
+                      label="Remove"
+                      icon="pi pi-trash"
+                      severity="danger"
+                      [text]="true"
+                      size="small"
+                      (onClick)="removeService(i)"
+                    />
+                  </div>
+                }
               </header>
 
               <label class="field">
@@ -212,18 +224,36 @@
       <div class="actions">
         <p-button
           type="button"
-          label="Cancel"
+          [label]="isView() ? 'Back' : 'Cancel'"
           icon="pi pi-times"
           severity="danger"
           (onClick)="goToFlows()"
         />
-        <p-button
-          type="submit"
-          [label]="saving() ? 'Saving…' : isEdit() ? 'Save changes' : 'Create flow'"
-          icon="pi pi-check"
-          [disabled]="saving()"
-          [loading]="saving()"
-        />
+        @if (isView()) {
+          <p-button
+            type="button"
+            label="Edit"
+            icon="pi pi-pencil"
+            severity="success"
+            (onClick)="goToEdit()"
+          />
+        } @else {
+          <p-button
+            type="submit"
+            [label]="
+              saving()
+                ? 'Saving…'
+                : isEdit()
+                  ? 'Save changes'
+                  : isDuplicate()
+                    ? 'Create duplicate'
+                    : 'Create flow'
+            "
+            icon="pi pi-check"
+            [disabled]="saving()"
+            [loading]="saving()"
+          />
+        }
       </div>
     </form>
   }

@@ -9,6 +9,7 @@ import {
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
+import { TooltipModule } from 'primeng/tooltip';
 import { forkJoin } from 'rxjs';
 import { Flow } from '../../../core/models/flow.model';
 import { ComponentDefinitionsApiService } from '../../../core/services/component-definitions-api.service';
@@ -27,7 +28,7 @@ type SortDir = 'asc' | 'desc';
 
 @Component({
   selector: 'app-flow-list-page',
-  imports: [RouterLink, DatePipe, ButtonModule],
+  imports: [RouterLink, DatePipe, ButtonModule, TooltipModule],
   templateUrl: './flow-list.page.html',
   styleUrl: './flow-list.page.css',
 })
@@ -81,6 +82,13 @@ export class FlowListPage implements OnInit {
         detail: 'Flow updated successfully.',
         life: 4000,
       });
+    } else if (saved === 'duplicated') {
+      this.messages.add({
+        severity: 'success',
+        summary: 'Saved',
+        detail: 'Flow duplicated successfully.',
+        life: 4000,
+      });
     }
 
     if (saved) {
@@ -100,6 +108,14 @@ export class FlowListPage implements OnInit {
 
   editFlow(id: string): void {
     void this.router.navigate(['/flows', id]);
+  }
+
+  viewFlow(id: string): void {
+    void this.router.navigate(['/flows', id, 'view']);
+  }
+
+  duplicateFlow(id: string): void {
+    void this.router.navigate(['/flows', id, 'duplicate']);
   }
 
   onNameQueryInput(event: Event): void {

@@ -32,4 +32,8 @@ export class FlowsApiService {
   delete(id: string): Observable<void> {
     return this.http.delete<void>(`${this.baseUrl}/${id}`);
   }
+
+  duplicate(id: string, name: string): Observable<Flow> {
+    return this.http.post<Flow>(`${this.baseUrl}/${id}/duplicate`, { name });
+  }
 }
