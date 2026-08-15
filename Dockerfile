@@ -10,12 +10,14 @@ RUN npm ci
 COPY backend/ ./
 
 COPY definitions/ ./definitions/
+COPY --from=frontend-build /frontend/dist/frontend/browser ./public
+
 
 RUN npm run build
 
 ENV NODE_ENV=production
 ENV DEFINITIONS_DIR=/app/definitions
-ENV DB_SYNCHRONIZE=true
+#ENV DB_SYNCHRONIZE=true
 
 EXPOSE 3000
 CMD ["npm", "run", "start:prod"]
