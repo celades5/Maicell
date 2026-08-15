@@ -11,5 +11,8 @@ export const buildDatabaseConfig = (
   password: config.get<string>('DB_PASSWORD', 'test'),
   database: config.get<string>('DB_DATABASE', 'MaicellDB'),
   autoLoadEntities: true,
-  synchronize: config.get<string>('NODE_ENV') !== 'production',
+  synchronize:
+    config.get<string>('DB_SYNCHRONIZE') === 'true' ||
+    (config.get<string>('DB_SYNCHRONIZE') !== 'false' &&
+      config.get<string>('NODE_ENV') !== 'production'),
 });
