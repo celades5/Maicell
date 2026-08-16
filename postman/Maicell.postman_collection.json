@@ -1,0 +1,296 @@
+{
+  "info": {
+    "_postman_id": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+    "name": "Maicell API",
+    "description": "Integration Flows API (NestJS). Import this collection plus a Local or Railway environment, then select the environment in the top-right of Postman.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "flowId",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Health",
+      "item": [
+        {
+          "name": "GET /api (Hello World)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/api",
+            "description": "Basic health check. Expect 200 and Hello World."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Component definitions",
+      "item": [
+        {
+          "name": "GET /api/component-definitions",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/api/component-definitions",
+            "description": "Lists the 4 whitelisted components with configFields from the JSON definitions."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Flows",
+      "item": [
+        {
+          "name": "GET /api/flows — list all",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/api/flows",
+            "description": "Returns all integration flows (client-side filter/sort in the UI)."
+          }
+        },
+        {
+          "name": "GET /api/flows/:id — get one",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/api/flows/{{flowId}}",
+            "description": "Set collection variable flowId (or paste a UUID). Used by View mode in the UI."
+          }
+        },
+        {
+          "name": "POST /api/flows — create (valid example)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "  const body = pm.response.json();",
+                  "  if (body.id) {",
+                  "    pm.collectionVariables.set('flowId', body.id);",
+                  "  }",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"postman-example-{{$timestamp}}\",\n  \"consumer\": {\n    \"componentId\": \"myesb-cron-consumer\",\n    \"config\": {\n      \"id\": \"scheduler-1\",\n      \"autostart\": true,\n      \"cron-expression\": \"0 0/5 * * * ?\"\n    }\n  },\n  \"services\": [\n    {\n      \"componentId\": \"myesb-filereader-service\",\n      \"config\": {\n        \"id\": \"filereader-1\",\n        \"file-uri\": \"file:/tmp/input.xml\",\n        \"return-type\": \"TEXT\",\n        \"delete-after-reading\": false\n      }\n    },\n    {\n      \"componentId\": \"myesb-xml2json-transformer\",\n      \"config\": {\n        \"id\": \"xml2json-1\",\n        \"omit-root-element\": false\n      }\n    }\n  ],\n  \"producer\": {\n    \"componentId\": \"myesb-file-producer\",\n    \"config\": {\n      \"id\": \"filedrop-1\",\n      \"directory\": \"file:/tmp/out\"\n    }\n  }\n}"
+            },
+            "url": "{{baseUrl}}/api/flows",
+            "description": "Valid Scheduler → File Reader → XML→JSON → File Drop. Saves flowId on 201 for later requests. Change the name if you get 409."
+          }
+        },
+        {
+          "name": "POST /api/flows — create (no services)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"postman-no-services-{{$timestamp}}\",\n  \"consumer\": {\n    \"componentId\": \"myesb-cron-consumer\",\n    \"config\": { \"id\": \"scheduler-1\" }\n  },\n  \"services\": [],\n  \"producer\": {\n    \"componentId\": \"myesb-file-producer\",\n    \"config\": {\n      \"id\": \"filedrop-1\",\n      \"directory\": \"file:/tmp/out\"\n    }\n  }\n}"
+            },
+            "url": "{{baseUrl}}/api/flows",
+            "description": "Minimal valid flow: consumer + producer only."
+          }
+        },
+        {
+          "name": "PATCH /api/flows/:id — update name",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"postman-renamed-{{$timestamp}}\"\n}"
+            },
+            "url": "{{baseUrl}}/api/flows/{{flowId}}",
+            "description": "Partial update. Requires flowId from a previous create."
+          }
+        },
+        {
+          "name": "POST /api/flows/:id/duplicate",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"postman-duplicate-{{$timestamp}}\"\n}"
+            },
+            "url": "{{baseUrl}}/api/flows/{{flowId}}/duplicate",
+            "description": "Copies consumer/services/producer from flowId under a new unique name."
+          }
+        },
+        {
+          "name": "DELETE /api/flows/:id",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": "{{baseUrl}}/api/flows/{{flowId}}",
+            "description": "Hard delete. Expect 200 with a success message body."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Validation examples (expect 400 / 409)",
+      "item": [
+        {
+          "name": "400 — role mismatch (File Drop as consumer)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"postman-role-mismatch-{{$timestamp}}\",\n  \"consumer\": {\n    \"componentId\": \"myesb-file-producer\",\n    \"config\": {\n      \"id\": \"drop-1\",\n      \"directory\": \"file:/tmp/out\"\n    }\n  },\n  \"services\": [],\n  \"producer\": {\n    \"componentId\": \"myesb-file-producer\",\n    \"config\": {\n      \"id\": \"drop-2\",\n      \"directory\": \"file:/tmp/out\"\n    }\n  }\n}"
+            },
+            "url": "{{baseUrl}}/api/flows",
+            "description": "API-only case the UI cannot pick. Expect 400 ROLE_MISMATCH."
+          }
+        },
+        {
+          "name": "400 — unknown component (Kafka)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"postman-kafka-rejected-{{$timestamp}}\",\n  \"consumer\": {\n    \"componentId\": \"kafka-consumer\",\n    \"config\": { \"id\": \"kafka-1\" }\n  },\n  \"services\": [],\n  \"producer\": {\n    \"componentId\": \"myesb-file-producer\",\n    \"config\": {\n      \"id\": \"drop-1\",\n      \"directory\": \"file:/tmp/out\"\n    }\n  }\n}"
+            },
+            "url": "{{baseUrl}}/api/flows",
+            "description": "Kafka is in the library JSON but not whitelisted. Expect 400 UNKNOWN_COMPONENT."
+          }
+        },
+        {
+          "name": "400 — missing required file-uri",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"postman-missing-file-uri-{{$timestamp}}\",\n  \"consumer\": {\n    \"componentId\": \"myesb-cron-consumer\",\n    \"config\": { \"id\": \"scheduler-1\" }\n  },\n  \"services\": [\n    {\n      \"componentId\": \"myesb-filereader-service\",\n      \"config\": {\n        \"id\": \"filereader-1\",\n        \"return-type\": \"TEXT\"\n      }\n    }\n  ],\n  \"producer\": {\n    \"componentId\": \"myesb-file-producer\",\n    \"config\": {\n      \"id\": \"filedrop-1\",\n      \"directory\": \"file:/tmp/out\"\n    }\n  }\n}"
+            },
+            "url": "{{baseUrl}}/api/flows",
+            "description": "File Reader missing required file-uri. Expect 400 REQUIRED_CONFIG."
+          }
+        },
+        {
+          "name": "400 — invalid enum return-type",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"postman-bad-enum-{{$timestamp}}\",\n  \"consumer\": {\n    \"componentId\": \"myesb-cron-consumer\",\n    \"config\": { \"id\": \"scheduler-1\" }\n  },\n  \"services\": [\n    {\n      \"componentId\": \"myesb-filereader-service\",\n      \"config\": {\n        \"id\": \"filereader-1\",\n        \"file-uri\": \"file:/tmp/input.xml\",\n        \"return-type\": \"PDF\"\n      }\n    }\n  ],\n  \"producer\": {\n    \"componentId\": \"myesb-file-producer\",\n    \"config\": {\n      \"id\": \"filedrop-1\",\n      \"directory\": \"file:/tmp/out\"\n    }\n  }\n}"
+            },
+            "url": "{{baseUrl}}/api/flows",
+            "description": "return-type must be TEXT | XML | BYTES. Expect 400 INVALID_ENUM."
+          }
+        },
+        {
+          "name": "400 — file-uri must start with file:",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"postman-bad-file-uri-{{$timestamp}}\",\n  \"consumer\": {\n    \"componentId\": \"myesb-cron-consumer\",\n    \"config\": { \"id\": \"scheduler-1\" }\n  },\n  \"services\": [\n    {\n      \"componentId\": \"myesb-filereader-service\",\n      \"config\": {\n        \"id\": \"filereader-1\",\n        \"file-uri\": \"/tmp/input.xml\",\n        \"return-type\": \"TEXT\"\n      }\n    }\n  ],\n  \"producer\": {\n    \"componentId\": \"myesb-file-producer\",\n    \"config\": {\n      \"id\": \"filedrop-1\",\n      \"directory\": \"file:/tmp/out\"\n    }\n  }\n}"
+            },
+            "url": "{{baseUrl}}/api/flows",
+            "description": "Domain rule: file-uri must start with file:. Expect 400."
+          }
+        },
+        {
+          "name": "409 — duplicate flow name",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"REPLACE_WITH_EXISTING_FLOW_NAME\",\n  \"consumer\": {\n    \"componentId\": \"myesb-cron-consumer\",\n    \"config\": { \"id\": \"scheduler-1\" }\n  },\n  \"services\": [],\n  \"producer\": {\n    \"componentId\": \"myesb-file-producer\",\n    \"config\": {\n      \"id\": \"filedrop-1\",\n      \"directory\": \"file:/tmp/out\"\n    }\n  }\n}"
+            },
+            "url": "{{baseUrl}}/api/flows",
+            "description": "Replace the name with one that already exists. Expect 409 Duplicate Flow Name."
+          }
+        },
+        {
+          "name": "400 — forbidNonWhitelisted extra property",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"postman-extra-prop-{{$timestamp}}\",\n  \"foo\": \"not-allowed\",\n  \"consumer\": {\n    \"componentId\": \"myesb-cron-consumer\",\n    \"config\": { \"id\": \"scheduler-1\" }\n  },\n  \"services\": [],\n  \"producer\": {\n    \"componentId\": \"myesb-file-producer\",\n    \"config\": {\n      \"id\": \"filedrop-1\",\n      \"directory\": \"file:/tmp/out\"\n    }\n  }\n}"
+            },
+            "url": "{{baseUrl}}/api/flows",
+            "description": "Extra top-level property foo is rejected by ValidationPipe forbidNonWhitelisted."
+          }
+        }
+      ]
+    }
+  ]
+}
