@@ -113,9 +113,19 @@ describe('Flows API (e2e)', () => {
 
     await request(app.getHttpServer())
       .delete(`/api/flows/${duplicateId}`)
-      .expect(204);
+      .expect(200)
+      .expect(({ body }) => {
+        expect(body.id).toBe(duplicateId);
+        expect(body.message).toContain('successfully deleted');
+      });
 
-    await request(app.getHttpServer()).delete(`/api/flows/${id}`).expect(204);
+    await request(app.getHttpServer())
+      .delete(`/api/flows/${id}`)
+      .expect(200)
+      .expect(({ body }) => {
+        expect(body.id).toBe(id);
+        expect(body.message).toContain('successfully deleted');
+      });
 
     await request(app.getHttpServer()).get(`/api/flows/${id}`).expect(404);
   });

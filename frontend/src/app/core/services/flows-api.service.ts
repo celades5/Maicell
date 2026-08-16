@@ -29,8 +29,10 @@ export class FlowsApiService {
     return this.http.patch<Flow>(`${this.baseUrl}/${id}`, payload);
   }
 
-  delete(id: string): Observable<void> {
-    return this.http.delete<void>(`${this.baseUrl}/${id}`);
+  delete(id: string): Observable<{ message: string; id: string; name: string }> {
+    return this.http.delete<{ message: string; id: string; name: string }>(
+      `${this.baseUrl}/${id}`,
+    );
   }
 
   duplicate(id: string, name: string): Observable<Flow> {

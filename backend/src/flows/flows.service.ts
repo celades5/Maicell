@@ -108,9 +108,17 @@ export class FlowsService {
     }
   }
 
-  async remove(id: string): Promise<void> {
+  async remove(
+    id: string,
+  ): Promise<{ message: string; id: string; name: string }> {
     const flow = await this.findOne(id);
+    const name = flow.name;
     await this.flowsRepository.remove(flow);
+    return {
+      id,
+      name,
+      message: `Flow with id "${id}" ("${name}") has been successfully deleted.`,
+    };
   }
 
   async duplicate(id: string, name: string): Promise<Flow> {

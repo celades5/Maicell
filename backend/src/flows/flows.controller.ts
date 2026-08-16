@@ -3,8 +3,6 @@ import {
   Controller,
   Delete,
   Get,
-  HttpCode,
-  HttpStatus,
   Param,
   ParseUUIDPipe,
   Patch,
@@ -12,7 +10,6 @@ import {
 } from '@nestjs/common';
 import {
   ApiCreatedResponse,
-  ApiNoContentResponse,
   ApiNotFoundResponse,
   ApiOkResponse,
   ApiOperation,
@@ -78,11 +75,24 @@ export class FlowsController {
   }
 
   @Delete(':id')
-  @HttpCode(HttpStatus.NO_CONTENT)
   @ApiOperation({ summary: 'Delete a flow' })
-  @ApiNoContentResponse({ description: 'Flow deleted' })
+  @ApiOkResponse({
+    description: 'Flow deleted',
+    schema: {
+      type: 'object',
+      properties: {
+        id: { type: 'string', format: 'uuid' },
+        name: { type: 'string' },
+        message: { type: 'string' },
+      },
+    },
+  })
   @ApiNotFoundResponse({ description: 'Flow not found' })
-  remove(@Param('id', ParseUUIDPipe) id: string): Promise<void> {
+  remove(@Param('id', ParseUUIDPipe) id: string): Promise<{
+    message: string;
+    id: string;
+    name: string;
+  }> {
     return this.flowsService.remove(id);
   }
 }

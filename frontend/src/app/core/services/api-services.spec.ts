@@ -98,7 +98,11 @@ describe('API HTTP services (mocked)', () => {
       `${environment.apiBaseUrl}/flows/flow-1`,
     );
     expect(deleteReq.request.method).toBe('DELETE');
-    deleteReq.flush(null);
+    deleteReq.flush({
+      id: 'flow-1',
+      name: 'Demo',
+      message: 'Flow with id "flow-1" ("Demo") has been successfully deleted.',
+    });
 
     flowsApi.duplicate('flow-1', 'Flow copy').subscribe();
     const duplicateReq = httpMock.expectOne(
