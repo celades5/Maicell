@@ -2,9 +2,9 @@ This README goes through all the clarifications of the project in order to under
 
 You can see a demo of the actual service in: **https://maicell-production.up.railway.app/flows** and the Swagger at **https://maicell-production.up.railway.app/api/docs**
 
-There is the **Postman** collection in the designated folder.
+There is the **Postman** collection in the designated folder. Select the correct environment in Postman after importing.
 
-## Set UP
+## SetuP
 
 ### Requirements
 The list of requirements can be seen in the file **requirements.txt** but include:
@@ -41,11 +41,10 @@ primeng=^19.1.4
 primeicons=^8.0.0
 TypeScript_frontend=~5.7.2
 
-In order to test it locally in your pc there are several steps that need to be followed.
+In order to test it locally on your pc there are several steps that need to be followed.
 ### 1. Clone and configure environment
 
-```
-bash
+```bash
 git clone https://github.com/celades5/Maicell.git
 cd Maicell
 ```
@@ -74,7 +73,7 @@ NODE_ENV=development
 
 ### 2. Start Docker (PostgreSQL + Nest + Angular)
 
-Once Step 1 is finished, from the repo root run **`docker compose up -d --build`** to start the Docker container. Wait until the container is healthy, this can be checked by `docker compose ps` or by a message from the used terminal mentioning the container is up and running. Host port **8080** maps to Postgres **5432** inside the container. To avoid clashes with other Projects, port 8080 has been used for this scenario. If you wish to change it, first stop the running container with `docker compose down`, update `root .env` port and then match it at the backend so Nest can connect. After start the container again and check is running in healthy mode. When that happens it will have a healthy postgres service using the image established in the `docker-compose.yml` in this case **postgres:16-alpine** which contains a small Linux environment with PostgreSQL 16 already installed and configured to start when the container boots. 
+Once Step 1 is finished, from the repo root run **`docker compose up -d --build`** to start the Docker container. Wait until the container is healthy, this can be checked by `docker compose ps` or by a message from the used terminal mentioning the container is up and running. Host port **8080** maps to Postgres **5432** inside the container. To avoid clashes with other Projects, port 8080 has been used for this scenario. If you wish to change it, first stop the running container with `docker compose down`, update `root .env` port and then match it at the backend so Nest can connect. Theb start the container again and check is running in healthy mode. When that happens it will have a healthy postgres service using the image established in the `docker-compose.yml` in this case **postgres:16-alpine** which contains a small Linux environment with PostgreSQL 16 already installed and configured to start when the container boots. 
 
 Wait until both services are up. You should see something like:
 
@@ -115,7 +114,7 @@ npm start
 
 This runs `ng serve --proxy-config proxy.conf.json`, which proxies `/api` to `http://localhost:3000`.
 
-UI is at [http://localhost:4200](http://localhost:4200). Dev proxy forwards /api to http://localhost:3000. If port 4200 is already in use, ng serve may offer another port — prefer freeing 4200, because backend CORS is configured for http://localhost:4200. **Full Docker stack (recommended for a quick run):** use only Step 2 and open [http://localhost:3000](http://localhost:3000).
+**Full Docker stack:** Open [http://localhost:3000/flows](http://localhost:3000/flows) (UI + API on one port). UI at [http://localhost:4200](http://localhost:4200); the dev proxy forwards `/api` to Nest on port 3000. Prefer keeping 4200 free, because CORS for this workflow defaults to `http://localhost:4200`.
 
 ## Database
 We use **PostgreSQL** as the database (persistence layer) for this challenge because:
@@ -184,14 +183,19 @@ Needs Postgres up.
 - App creates
 - Sidebar links (“Flows”, “Create New Flow”)
 - Definitions service `GET /component-definitions`
-- Flows service CRUD HTTP verbs (mocked)
+- Flows service CRUD HTTP verbs (mocked) including duplicate
 - Renders inputs from `configFields`
 
 
 ## Assumptions
 Several assumptions have been made for this challenge. First, **no authorization** is handled, single trusted local/demo user, the API is open. There is also no visual or diagram of a flow editor, a single UI is presented. 
 
-The app lets the use configure flows only, there is no runtime execution of consumers / services / producers. The app is able to let the user choose **names, components, config fields** and save that to the DB chosen. The model lets the user have 1 consumer + 0+ services + 1 producer. The consumer can only be **Scheduler** while the Producer can only be **File Drop**. As mentioned before the services can be 0+ combinations. The app allows the user to have more than one service, which will be stored with an index, the user can at the time of creation or editing to change the order of the services.
+The app lets the use configure flows only, there is no runtime execution of consumers / services / producers. The app is able to let the user choose **names, components, config fields** and save that to the DB chosen. The model lets the user have 1 consumer + 0+ services + 1 producer. The consumer can only be **Scheduler** while the Producer can only be **File Drop**. As mentioned before the services can be 0+ combinations. The app allows the user to have more than one service, which will be stored with an index, the user can at the time of creation or editing to change the order of the services. The Ui lets you: 
+
+- **View** (blue icon) and read only flows in detail
+- **Edit** (green icon) a flow
+- **Duplicate** (orange icon) a flow with prefilled data but with empty name.
+- **Delete** (red icon) a flow. Api returns a success body.
 
 A form of catalog is built by merging **two file types:** `challenge-library.json` holds identity for each component (**id**, display **name/label**, **description**, **category**), while each `definitions/myesb-*Type.json` (for example `myesb-cron-consumerType.json`) holds the **form/config schema** (field keys, labels, required/optional, types, defaults, options). At startup, Nest takes the **4 whitelisted** ids, joins each library entry with its matching Type schema into one normalised definition, and keeps the result in memory. Later, `GET /api/component-definitions` reuses that cache. That has been done this way since the catalog doesn’t change while the app runs unless the user decide to modify the JSON files manually. As mentioned above, merging library + Type schemas once at startup is simple and fast.
 
@@ -213,7 +217,7 @@ Several things have been added in order to simulate a production integration flo
 
 The UI shows catalog labels (e.g. Scheduler, File Drop); the database and API persist the ids (e.g. myesb-cron-consumer, myesb-file-producer).
 
-TypeORM synchronize is enabled in development so tables follow entity changes automatically; it is disabled when NODE_ENV=production. On each backend start, TypeORM compares the entities to the DB and tries to match them: create missing tables/columns, alter types when it can, drop columns that no longer exist on the entity, etc.
+TypeORM `synchronize` is enabled when `NODE_ENV` is not `production`, so local `npm run start:dev` can evolve tables automatically. In production containers (`NODE_ENV=production`), sync stays off unless you set **`DB_SYNCHRONIZE=true`** (used on Railway / Compose demos to create tables without migrations). On each backend start with sync on, TypeORM compares entities to the DB and tries to match them: create missing tables/columns, alter types when it can, drop columns that no longer exist on the entity, etc. That is convenient for demos, not a substitute for real migrations long term.
 
 
 The app **does not:**
@@ -298,7 +302,7 @@ The API has no authentication. That makes Postman and Swagger demos easy, but an
 
 ## Simplified 
 
-There is No runtime execution since cron does not fire, files are not read/written, XML→JSON does not run, and there is no live connection. The app only configures and stores flows. There is no authentication for the API, meaning is open. There is also no visual / diagram of flow editor.
+There is no runtime execution since cron does not fire, files are not read/written, XML→JSON does not run, and there is no live connection. The app only configures and stores flows. There is no authentication for the API, meaning is open. There is also no visual / diagram of flow editor.
 
 Only the 4 challenge components are allowed; the rest of challenge-library.json (Kafka, OAuth, …) is ignored. As mentioned previously, Nested sequence, advanced, and beanreference fields are excluded from forms and validation. For the challenge the File URIs must start with `file:` for both File Reader file-uri and File Drop directory (not `classpath:`).
 
@@ -324,6 +328,6 @@ Richer catalog usage.
 
 
 ## AI Tools
-AI tools such as Cursor has benn used for the challenge. AI has designed the test based on the clarification that they needed to be focused in based on the criteria of the assigment.
+AI tools such as Cursor have been used for the challenge. AI has designed the test based on the clarification that they needed to be focused in based on the criteria of the assigment.
 
-In addition AI handled the CSS and part of the frontend changes design based on a set of instructions after the initial skeleton was implemented.
+In addition AI handled the CSS and part of the frontend changes design based on a set of instructions after the initial skeleton was implemented. It has also checked for typos in th README file.
